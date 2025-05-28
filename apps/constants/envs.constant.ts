@@ -10,4 +10,6 @@ export const envs: CONSTANTS = {
   PORT: isNaN(Number(process.env.PORT)) ? 5500 : Number(process.env.PORT),
   DATABASE_URL: (process.env.DATABASE_URL as string) ?? '',
   REDIS_URL: (process.env.REDIS_URL as string) ?? '',
+  ALLOWED_ORIGINS: (process.env.ALLOWED_ORIGINS as string) ?? '',
+  JSON_LIMIT: (process.env.JSON_LIMIT as string) ?? '',
 };

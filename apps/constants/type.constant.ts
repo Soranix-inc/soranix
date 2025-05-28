@@ -5,4 +5,6 @@ export type CONSTANTS = {
   PORT: number;
   DATABASE_URL: string;
   REDIS_URL: string;
+  ALLOWED_ORIGINS: string;
+  JSON_LIMIT: string;
 };

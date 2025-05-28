@@ -23,6 +23,12 @@ importers:
       '@types/express':
         specifier: ^5.0.2
         version: 5.0.2
+      '@types/express-rate-limit':
+        specifier: ^6.0.2
+        version: 6.0.2(express@5.1.0)
+      '@types/express-slow-down':
+        specifier: ^2.0.0
+        version: 2.0.0(express@5.1.0)
       '@types/ip':
         specifier: ^1.1.3
         version: 1.1.3
@@ -71,6 +77,12 @@ importers:
       express:
         specifier: ^5.1.0
         version: 5.1.0
+      express-rate-limit:
+        specifier: ^7.5.0
+        version: 7.5.0(express@5.1.0)
+      express-slow-down:
+        specifier: ^2.1.0
+        version: 2.1.0(express@5.1.0)
       http-status:
         specifier: ^2.1.0
         version: 2.1.0
@@ -534,8 +546,16 @@ packages:
     resolution: {integrity: sha512-g2FXjlDX/cYuc5CiQvyU/6kkbP1JtmGzh0obW50zD7OKeILVL0NSpPWLXVfqoAGQjom2/SLLx9zHq0KXvD6mbw==}
     deprecated: This is a stub types definition. dotenv provides its own type definitions, so you do not need this installed.
 
+  '@types/express-rate-limit@6.0.2':
+    resolution: {integrity: sha512-e1xZLOOlxCDvplAGq7rDcXtbdBu2CWRsMjaIu1LVqGxWtKvwr884YE5mPs3IvHeG/OMDhf24oTaqG5T1bV3rBQ==}
+    deprecated: This is a stub types definition. express-rate-limit provides its own type definitions, so you do not need this installed.
+
   '@types/express-serve-static-core@5.0.6':
     resolution: {integrity: sha512-3xhRnjJPkULekpSzgtoNYYcTWgEZkp4myc+Saevii5JPnHNvHMRlBSHDbs7Bh1iPPoVTERHEZXyhyLbMEsExsA==}
+
+  '@types/express-slow-down@2.0.0':
+    resolution: {integrity: sha512-pTkMCl0B1ypB26An5F0DVxC/Emi0yiapThxUDsL/mRQ+Szmoeuximv4XqgZm8lY5ZHqH/DQ8FschjxWWMUpQlQ==}
+    deprecated: This is a stub types definition. express-slow-down provides its own type definitions, so you do not need this installed.
 
   '@types/express@5.0.2':
     resolution: {integrity: sha512-BtjL3ZwbCQriyb0DGw+Rt12qAXPiBTPs815lsUvtt1Grk0vLRMZNMUZ741d5rjk+UQOxfDiBZ3dxpX00vSkK3g==}
@@ -914,6 +934,18 @@ packages:
   etag@1.8.1:
     resolution: {integrity: sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==}
     engines: {node: '>= 0.6'}
+
+  express-rate-limit@7.5.0:
+    resolution: {integrity: sha512-eB5zbQh5h+VenMPM3fh+nw1YExi5nMr6HUCR62ELSP11huvxm/Uir1H1QEyTkk5QX6A58pX6NmaTMceKZ0Eodg==}
+    engines: {node: '>= 16'}
+    peerDependencies:
+      express: ^4.11 || 5 || ^5.0.0-beta.1
+
+  express-slow-down@2.1.0:
+    resolution: {integrity: sha512-tQ/ItTDbGfo+fLS+jxu19vgYOgZk7wyOakuAsnzl8f7HmxG3ynWAoo136+oqB+rqHCk3QyM6VoXL03qA5a4gVQ==}
+    engines: {node: '>= 16'}
+    peerDependencies:
+      express: 4 || 5 || ^5.0.0-beta.1
 
   express@5.1.0:
     resolution: {integrity: sha512-DT9ck5YIRU+8GYzzU5kT3eHGA5iL+1Zd0EutOmTE9Dtk+Tvuzd23VBU+ec7HPNSTxXYO55gPV/hq4pSBJDjFpA==}
@@ -1816,12 +1848,24 @@ snapshots:
     dependencies:
       dotenv: 16.5.0
 
+  '@types/express-rate-limit@6.0.2(express@5.1.0)':
+    dependencies:
+      express-rate-limit: 7.5.0(express@5.1.0)
+    transitivePeerDependencies:
+      - express
+
   '@types/express-serve-static-core@5.0.6':
     dependencies:
       '@types/node': 22.15.21
       '@types/qs': 6.14.0
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
+
+  '@types/express-slow-down@2.0.0(express@5.1.0)':
+    dependencies:
+      express-slow-down: 2.1.0(express@5.1.0)
+    transitivePeerDependencies:
+      - express
 
   '@types/express@5.0.2':
     dependencies:
@@ -2170,6 +2214,15 @@ snapshots:
   escape-html@1.0.3: {}
 
   etag@1.8.1: {}
+
+  express-rate-limit@7.5.0(express@5.1.0):
+    dependencies:
+      express: 5.1.0
+
+  express-slow-down@2.1.0(express@5.1.0):
+    dependencies:
+      express: 5.1.0
+      express-rate-limit: 7.5.0(express@5.1.0)
 
   express@5.1.0:
     dependencies:
