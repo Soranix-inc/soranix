@@ -92,6 +92,9 @@ importers:
       redis:
         specifier: ^5.1.0
         version: 5.1.0
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
       resolve-tspaths:
         specifier: ^0.8.23
         version: 0.8.23(typescript@5.8.3)
@@ -1318,6 +1321,9 @@ packages:
   redis@5.1.0:
     resolution: {integrity: sha512-5G5k9sYo5H5L0kd7UETiJZFTkIClH31fSmaEk2eU8E7mrmF0J1t6RqmFXOCJmSRlNd3QyvDUK/AWL9psbKaN0Q==}
     engines: {node: '>= 18'}
+
+  reflect-metadata@0.2.2:
+    resolution: {integrity: sha512-urBwgfrvVP/eAyXx4hluJivBKzuEbSQs9rKWCrCkbSxNv8mxPcUZKeuoF3Uy4mJl3Lwprp6yy5/39VWigZ4K6Q==}
 
   resolve-pkg-maps@1.0.0:
     resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
@@ -2587,6 +2593,8 @@ snapshots:
       '@redis/json': 5.1.0(@redis/client@5.1.0)
       '@redis/search': 5.1.0(@redis/client@5.1.0)
       '@redis/time-series': 5.1.0(@redis/client@5.1.0)
+
+  reflect-metadata@0.2.2: {}
 
   resolve-pkg-maps@1.0.0: {}
 

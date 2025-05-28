@@ -4,7 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ENV_FILE=envs/.env.dev LOG_PATH=logs/dev/ ts-node-dev --respawn ./apps/app.ts",
+    "start": "npx drizzle-kit push && ENV_FILE=envs/.env.pro LOG_PATH=logs/pro/ node ./dist/apps/app.js",
+    "build": "tsc && resolve-tspaths",
+    "docker:dev": "docker-compose up --remove-orphans",
+    "docker:start": "npx drizzle-kit push && ts-node-dev --respawn ./apps/app.ts",
+    "docker:build": "docker compose down -v && docker compose up --build"
   },
   "keywords": [],
   "author": "",
@@ -39,6 +45,7 @@
     "nodemon": "^3.1.10",
     "pg": "^8.16.0",
     "redis": "^5.1.0",
+    "reflect-metadata": "^0.2.2",
     "resolve-tspaths": "^0.8.23",
     "ts-node-dev": "^2.0.0"
   },
@@ -46,5 +53,8 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "winston": "^3.17.0"
+  },
+  "_moduleAliases": {
+    "@": "./apps/"
   }
 }
