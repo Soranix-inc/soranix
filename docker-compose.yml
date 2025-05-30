@@ -14,10 +14,10 @@ services:
     ports:
       - '5500:5500'
     depends_on:
-      - postgres
-      - redis
+      - soranix_postgres
+      - soranix_redis
 
-  postgres:
+  soranix_postgres:
     image: postgres:latest
     restart: always
     ports:
@@ -29,7 +29,7 @@ services:
       POSTGRES_PASSWORD: mypassword
       POSTGRES_DB: redis
 
-  redis:
+  soranix_redis:
     image: redis:latest
     restart: always
     ports:
