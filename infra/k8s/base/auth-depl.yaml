@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  auth
+  labels:
+    name:  auth-depl
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: auth
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name:  auth
+    spec:
+      containers:
+      - image:  soranix/auth
+        name:  auth
+        resources:
+          requests:
+            cpu: "20m"
+            memory: "55M"
+          limits:
+            cpu: "100m"
+            memory: "128M"
+        livenessProbe:
+          httpGet:
+            path: /_status/healthz
+            port: 5000
+          initialDelaySeconds: 90
+          timeoutSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /_status/healthz
+            port: 5000
+          initialDelaySeconds: 30
+          timeoutSeconds: 10
+        env:
+        - name:  ENVVARNAME
+          value:  ENVVARVALUE       
+        ports:
+        - containerPort:  5000
+          name:  auth-api
+        volumeMounts:
+        - mountPath: /data
+          name: data
+      volumes:
+        - name: data
+          emptyDir: {}
+      restartPolicy: Always
+      imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name:  auth-serv
+spec:
+    selector: 
+      app: auth
+    ports:
+    - name:  auth
+      port:  5000
+      targetPort: 5000
+      protocol: TCP

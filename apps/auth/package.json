@@ -1,0 +1,40 @@
+{
+  "name": "auth-service",
+  "version": "1.0.0",
+  "description": "Auth service for soranix microservice",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Soranix-inc/soranix.git"
+  },
+  "keywords": [
+    "auth",
+    "soranix",
+    "finance"
+  ],
+  "author": "https://github.com/wealthralph",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Soranix-inc/soranix/issues"
+  },
+  "homepage": "https://github.com/Soranix-inc/soranix#readme",
+  "dependencies": {
+    "axios": "^1.9.0",
+    "body-parser": "^2.2.0",
+    "chalk": "^5.4.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "cryptr": "^6.3.0",
+    "dotenv": "^16.5.0",
+    "drizzle-orm": "^0.44.2",
+    "express-useragent": "^1.0.15",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

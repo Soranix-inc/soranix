@@ -1,0 +1,37 @@
+# ─── 1. Base & Metadata ─────────────────────────────
+FROM node:24-alpine3.21
+
+LABEL name="soranix-auth-service"
+LABEL description="Development image for soranix auth service with Turborepo (Node.js v20)"
+
+# Set development mode
+ENV NODE_ENV=development
+WORKDIR /app
+
+# Create non-root user
+RUN addgroup --system soranix \
+    && adduser --system --ingroup soranix soranix
+USER soranix
+
+# ─── 2. Install Global Tools ────────────────────────
+# Install Turborepo CLI and any other global dev tools
+RUN npm install -g turbo
+
+# ─── 3. Dependency Caching & Install ─────────────────
+COPY package.json package-lock.json turbo.json ./
+# Cache your npm cache to speed up repeated installs
+RUN --mount=type=cache,target=/app/.npm \
+    npm set cache /app/.npm && \
+    npm ci
+
+# ─── 4. Copy Source & Prepare for Watch ─────────────
+# Copy everything (code, workspaces, configs)
+COPY --chown=soranix:soranix . .
+
+# ─── 5. Expose Ports for All Workspaces ─────────────
+# (adjust ports to match your apps — e.g., web:3000, api:1990)
+EXPOSE 3000 1990
+
+# ─── 6. Development Entrypoint ─────────────────────
+# Launch Turborepo’s dev pipeline, which will in turn start each workspace in watch mode
+CMD ["turbo", "run", "dev", "--filter=..."]

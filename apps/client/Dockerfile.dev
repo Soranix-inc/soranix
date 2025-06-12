@@ -1,0 +1,21 @@
+FROM node:24-alpine3.21
+
+LABEL name="client"
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN --mount=type=cache,target=/app/.npm \
+    npm set cache /app/.npm && \ 
+    npm i
+
+COPY . .
+
+ENV PORT=3000
+
+EXPOSE ${PORT}
+
+CMD [ "npm", "run", "dev" ]
+
+

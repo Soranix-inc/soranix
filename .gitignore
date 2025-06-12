@@ -1,0 +1,56 @@
+# Node modules
+node_modules
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output
+dist/
+build/
+.out/
+.next/
+coverage/
+*.tsbuildinfo
+
+# Dependency directories
+jspm_packages/
+
+# dotenv environment variables
+.env
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Husky
+# .husky/_
+
+# Misc
+*.log
+*.tgz
+
+# Docker
+docker-compose.override.yml
+
+apps/client/node_modules
+
+# vercel
+.vercel
+
+# Optional npm cache directory
+.npm
+
+# Turbo
+.turbo/

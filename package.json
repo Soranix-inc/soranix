@@ -1,0 +1,49 @@
+{
+  "name": "soranix",
+  "version": "1.0.0",
+  "description": "Soranix is a AI powered operating system for finance ",
+  "main": "index.js",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:env": "node scripts/start.js",
+    "start:server": "npm run dev --workspace=server",
+    "start:auth": "npm run dev --workspace=auth",
+    "start:payments": "npm run dev --workspace=payments",
+    "start:banking": "npm run dev --workspace=banking",
+    "start:flows": "npm run dev --workspace=flows",
+    "start:portfolio": "npm run dev --workspace=portfolio",
+    "prepare": "husky",
+    "commitlint": " commitlint --edit -c  ",
+    "commit": "commit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Soranix-inc/soranix.git"
+  },
+  "keywords": [
+    "Finance",
+    "AI",
+    "Budget"
+  ],
+  "author": "Soranix",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Soranix-inc/soranix/issues"
+  },
+  "packageManager": "npm@11.4.1",
+  "homepage": "https://github.com/Soranix-inc/soranix#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/cz-commitlint": "^19.8.1",
+    "husky": "^9.1.7",
+    "turbo": "^2.5.4"
+  }
+}

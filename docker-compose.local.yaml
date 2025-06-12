@@ -1,0 +1,43 @@
+services:
+    soranix-client:
+        build:
+          context: ./apps/client
+          dockerfile: Dockerfile.dev
+        ports:
+          - 3000:3000
+        restart: always
+        depends_on:
+          - soranix-auth
+          # - soranix-payments
+          # - soranix-banking
+          # - soranix-ai
+          # - soranix-flows
+          # - soranix-portfolio
+        environment:
+          - CHOKIDAR_USEPOLLING=true
+          - PORT=3000
+        volumes:
+          - /app/node_modules
+          - ./client:/app
+        networks: 
+          - soranix
+    
+
+    soranix-auth:
+      build:
+        context: ./apps/client
+        dockerfile: Dockerfile.dev
+      volumes:
+        - /app/node-modules
+        - ./server:/app
+      ports:
+        - target: 5001
+          published: 5001
+          mode: "host"
+      networks: 
+        - soranix
+
+
+
+networks:
+  soranix:
