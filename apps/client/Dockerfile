@@ -9,9 +9,8 @@ WORKDIR /app
 
 RUN npm install -g turbo
 
-# Copy everything in, then prune down to only ‘web’
 COPY . .
-RUN turbo prune client --docker
+RUN turbo prune @soranix/client --docker
 
 # ──────────── 3. Installer Stage ────────────
 FROM base AS installer

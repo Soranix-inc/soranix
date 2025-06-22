@@ -11,12 +11,12 @@
   ],
   "scripts": {
     "dev": "turbo run dev",
+    "start:apps": "turbo run dev --filter=./apps/*",
+    "start:services": "turbo run dev --filter=./services/*",
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "turbo run format",
     "start:env": "node scripts/start.js",
-    "start:client": "npm run dev --workspace=@soranix/client",
-    "start:auth": "npm run dev --workspace=@soranix/auth",
     "prepare": "husky",
     "commitlint": " commitlint --edit -c  ",
     "commit": "commit"
@@ -41,10 +41,17 @@
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@commitlint/cz-commitlint": "^19.8.1",
+    "@soranix/client": "^0.1.0",
     "husky": "^9.1.7",
-    "turbo": "^2.5.4"
-  },
-  "dependencies": {
+    "lint-staged": "^16.1.2",
+    "turbo": "^2.5.4",
     "@commitlint/prompt-cli": "^19.8.1"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.json": "prettier --write"
   }
 }

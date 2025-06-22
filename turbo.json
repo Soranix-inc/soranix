@@ -20,9 +20,10 @@
             ]
         },
         "lint": {
-            "dependsOn": [
-                "^build"
-            ]
+            "outputs": []
+        },
+        "format": {
+            "outputs": []
         },
         "dev": {
             "cache": false,

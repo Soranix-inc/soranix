@@ -1,0 +1,15 @@
+{
+  "name": "@tooling/prettier",
+  "version": "1.0.0",
+  "private": true,
+  "files": [
+    "prettier.config.ts"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "prettier": "3.5.3"
+  }
+}

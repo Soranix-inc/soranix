@@ -17,12 +17,13 @@ const Configuration = {
         "style",
         "test",
         "init",
+        "infra"
       ],
     ],
     "subject-case": [2, "always", "sentence-case"],
     "header-max-length": [2, "always", 72],
     "body-max-line-length": [1, "always", 100],
-    "scope-enum": [2, "always", ["admin", "client", "auth", "global", "ai", "banking", "payments", "flows", "notifications", "portfolio", "payments"]],
+    "scope-enum": [2, "always", ["admin", "client", "auth", "global", "ai", "banking", "payments", "flows", "notifications", "portfolio", "payments", "web"]],
     "scope-empty": [2, "never"],
     "footer-empty": [0, "always"],
     "subject-full-stop": [2, "never", "."],
@@ -110,6 +111,17 @@ const Configuration = {
             title: "Reverts",
             emoji: "🗑",
           },
+          init: {
+            description: "Initializes a project or repo",
+            title: "Init",
+            emoji: "🗑",
+          },
+          infra: {
+            description: "Changes related to infrastructure",
+            title: "infra",
+            emoji: "🗑",
+          },
+
         },
       },
       scope: {
