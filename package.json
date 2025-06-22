@@ -5,7 +5,9 @@
   "main": "index.js",
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/*",
+    "services/*",
+    "tooling/*"
   ],
   "scripts": {
     "dev": "turbo run dev",
@@ -13,12 +15,8 @@
     "lint": "turbo run lint",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:env": "node scripts/start.js",
-    "start:server": "npm run dev --workspace=server",
-    "start:auth": "npm run dev --workspace=auth",
-    "start:payments": "npm run dev --workspace=payments",
-    "start:banking": "npm run dev --workspace=banking",
-    "start:flows": "npm run dev --workspace=flows",
-    "start:portfolio": "npm run dev --workspace=portfolio",
+    "start:client": "npm run dev --workspace=@soranix/client",
+    "start:auth": "npm run dev --workspace=@soranix/auth",
     "prepare": "husky",
     "commitlint": " commitlint --edit -c  ",
     "commit": "commit"
@@ -45,5 +43,8 @@
     "@commitlint/cz-commitlint": "^19.8.1",
     "husky": "^9.1.7",
     "turbo": "^2.5.4"
+  },
+  "dependencies": {
+    "@commitlint/prompt-cli": "^19.8.1"
   }
 }

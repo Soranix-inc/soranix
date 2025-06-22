@@ -1,0 +1,27 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+metadata:
+  name: soranix
+build:
+  local: 
+    push: false
+  artifacts:
+    - image: soranix/auth
+      context: services/auth
+      docker:
+        dockerfile: Dockerfile.dev
+manifests:
+  kustomize:
+    paths:
+      - infra\k8s\base
+profiles:
+  - name: development
+    manifests:
+      kustomize:
+        paths:
+          - infra\k8s\overlays\development
+  - name: production
+    manifests:
+      kustomize:
+        paths:
+          - infra\k8s\overlays\production
