@@ -6,7 +6,7 @@
     "ui",
     "package"
   ],
-  "exports":{
+  "exports": {
     "./components": "./src/components/index.ts",
     "./lib": "./src/lib/index.ts",
     "./hooks": "./src/hooks/index.ts"
@@ -25,7 +25,23 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
   "dependencies": {
-    "class-variance-authority": "^0.7.1"
+    "@radix-ui/react-dialog": "^1.1.14",
+    "@radix-ui/react-separator": "^1.1.7",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-tooltip": "^1.2.7",
+    "@tailwindcss/postcss": "^4.1.10",
+    "class-variance-authority": "^0.7.1",
+    "lucide-react": "^0.513.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.10",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@tooling/typescript": "*"
   }
 }

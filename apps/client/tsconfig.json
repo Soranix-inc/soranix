@@ -2,11 +2,10 @@
   "extends": "@tooling/typescript/nextjs.json",
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "prettier.config.js"],
   "compilerOptions": {
-  
+    // "baseUrl": "./src",
     "paths": {
       "@/*": ["./src/*"],
-      // "@packages/ui/*": ["../../packages/ui/src/*"],
-      // "@tooling/*": ["../../tooling/*"],
+      "@/packages": ["../../packages/ui/*"],
     }
   }
 }
