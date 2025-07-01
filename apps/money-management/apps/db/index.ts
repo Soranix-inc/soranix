@@ -1,14 +1,16 @@
+import { envs } from "@/constants";
 import { DataSource } from "typeorm";
-export const AppDataSource = new DataSource({
+
+export default new DataSource({
 	type: "postgres",
-	host: "localhost",
-	port: 5432,
-	username: "test",
-	password: "test",
-	database: "test",
-	synchronize: true,
+	host: envs.SQL_DATABASE_HOST,
+	port: envs.SQL_DATABASE_PORT,
+	username: envs.SQL_DATABASE_USERNAME,
+	password: envs.SQL_DATABASE_PASSWORD,
+	database: envs.SQL_DATABASE_NAME,
+	synchronize: false,
 	logging: true,
 	entities: [],
 	subscribers: [],
-	migrations: [],
+	migrations: ["/migrations/*.ts"],
 });

@@ -7,11 +7,13 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"dev": "ENV_FILE=envs/.env.dev LOG_PATH=logs/dev/ ts-node-dev --respawn ./apps/app.ts",
 		"dev:loc": "ENV_FILE=envs/.env.loc LOG_PATH=logs/loc/ ts-node-dev --respawn ./apps/app.ts",
-		"start": "npx drizzle-kit push && ENV_FILE=envs/.env.pro LOG_PATH=logs/pro/ node ./dist/apps/app.js",
+		"start": "ENV_FILE=envs/.env.pro LOG_PATH=logs/pro/ node ./dist/apps/app.js",
 		"build": "tsc && resolve-tspaths",
 		"docker:dev": "docker-compose up --remove-orphans",
-		"docker:start": "npx drizzle-kit push && ts-node-dev --respawn ./apps/app.ts",
-		"docker:build": "docker compose down -v && docker compose up --build"
+		"docker:start": "docker-compose -f docker-compose.yml build --no-cache && docker image prune -f",
+		"docker:build": "docker compose down -v && docker compose up --build",
+		"docker:deploy": "npm run docker:build && npm run docker:start",
+		"db:create": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs db:create -d ./apps/db/index.ts"
 	},
 	"keywords": [],
 	"author": "",

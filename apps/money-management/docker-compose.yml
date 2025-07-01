@@ -1,9 +1,9 @@
 services:
-  budget:
+  money_management:
     build:
       context: .
       dockerfile: ./Dockerfile
-    command: ['npm', 'run', 'docker:start']
+    command: ["npm", "run", "docker:start"]
     container_name: budget
     environment:
       - ENV_FILE=envs/.env.loc
@@ -12,7 +12,7 @@ services:
       - .:/app
       - /app/node_modules
     ports:
-      - '5500:5500'
+      - "5500:5500"
     depends_on:
       - soranix_postgres
       - soranix_redis
@@ -21,7 +21,7 @@ services:
     image: postgres:latest
     restart: always
     ports:
-      - '5431:5432'
+      - "5431:5432"
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     environment:
@@ -33,4 +33,4 @@ services:
     image: redis:latest
     restart: always
     ports:
-      - '6379:6379'
+      - "6379:6379"

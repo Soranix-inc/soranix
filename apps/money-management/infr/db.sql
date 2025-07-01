@@ -1,0 +1,1 @@
+CREATE DATABASE soranix_money_mngmt;

@@ -12,7 +12,7 @@ import http from "http";
 import ip from "ip";
 import { winstonLogger } from "./config";
 import { envs } from "./constants";
-import { AppDataSource } from "./db";
+import AppDataSource from "./db";
 import { errorHandler } from "./middlewares/handler";
 
 const root = new RootModule(AppDataSource);
