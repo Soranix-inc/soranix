@@ -1,0 +1,6 @@
+NODE_ENV=production
+PORT=5500
+DATABASE_URL=postgres://danielbello@soranix_postgres:5432/my_database
+REDIS_URL=redis://soranix_redis:6379
+ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
+JSON_LIMIT=5GB

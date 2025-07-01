@@ -1,0 +1,36 @@
+services:
+  budget:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: ['npm', 'run', 'docker:start']
+    container_name: budget
+    environment:
+      - ENV_FILE=envs/.env.loc
+      - LOG_PATH=logs/
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - '5500:5500'
+    depends_on:
+      - soranix_postgres
+      - soranix_redis
+
+  soranix_postgres:
+    image: postgres:latest
+    restart: always
+    ports:
+      - '5431:5432'
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: redis
+
+  soranix_redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - '6379:6379'

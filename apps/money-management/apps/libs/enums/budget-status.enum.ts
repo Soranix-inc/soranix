@@ -1,0 +1,5 @@
+export enum BUDGET_STATUS_ENUM {
+  ON_TRACK = 'ON-TRACK',
+  AT_RISK = 'AT-RISK',
+  OVERRUN = 'OVERRUN',
+}
