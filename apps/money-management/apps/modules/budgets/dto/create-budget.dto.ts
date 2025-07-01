@@ -1,57 +1,57 @@
-import { BUDGET_STATUS_ENUM, BUDGET_STATE_ENUM } from '@/libs/enums';
-import { Budget } from '../entities/budget';
+import { BUDGET_STATE_ENUM, BUDGET_STATUS_ENUM } from "@/libs/enums";
 import {
-  IsBoolean,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsUUID,
-  Min,
-} from 'class-validator';
+	IsBoolean,
+	IsNotEmpty,
+	IsNumber,
+	IsOptional,
+	IsString,
+	IsUUID,
+	Min,
+} from "class-validator";
+import { Budget } from "../entities/budget.entities";
 
 export class CreateBudgetDto implements Budget {
-  id!: string;
+	id!: string;
 
-  @IsNotEmpty()
-  @IsString()
-  name!: string;
+	@IsNotEmpty()
+	@IsString()
+	name!: string;
 
-  @IsNotEmpty()
-  @IsString()
-  description!: string;
+	@IsNotEmpty()
+	@IsString()
+	description!: string;
 
-  status!: BUDGET_STATUS_ENUM;
+	status!: BUDGET_STATUS_ENUM;
 
-  @IsOptional()
-  parentBudget!: string;
+	@IsOptional()
+	parentBudget!: string;
 
-  state!: BUDGET_STATE_ENUM;
+	state!: BUDGET_STATE_ENUM;
 
-  @IsNotEmpty()
-  @IsNumber()
-  @Min(0)
-  allocatedAmount!: number;
+	@IsNotEmpty()
+	@IsNumber()
+	@Min(0)
+	allocatedAmount!: number;
 
-  @IsNotEmpty()
-  @IsBoolean()
-  isGlobal!: boolean;
+	@IsNotEmpty()
+	@IsBoolean()
+	isGlobal!: boolean;
 
-  @IsNotEmpty()
-  @IsString()
-  @IsUUID()
-  userId!: string;
+	@IsNotEmpty()
+	@IsString()
+	@IsUUID()
+	userId!: string;
 
-  @IsNotEmpty()
-  @IsString()
-  @IsUUID()
-  accountId!: string;
+	@IsNotEmpty()
+	@IsString()
+	@IsUUID()
+	accountId!: string;
 
-  configuration: any;
+	configuration: any;
 
-  createdAt!: Date;
+	createdAt!: Date;
 
-  updatedAt!: Date;
+	updatedAt!: Date;
 
-  deletedAt!: Date;
+	deletedAt!: Date;
 }

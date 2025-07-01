@@ -1,0 +1,6 @@
+export enum BUDGET_CYCLE {
+	DAILY = "DAILY",
+	WEEKLY = "WEEKLY",
+	MONTHLY = "MONTHLY",
+	YEARLY = "YEARLY",
+}

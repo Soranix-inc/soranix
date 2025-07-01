@@ -1,21 +1,21 @@
 require("reflect-metadata");
 require("module-alias/register");
 
-import express from "express";
+import { RootModule } from "@/modules";
 import compression from "compression";
-import cors from "cors";
-import slow from "express-slow-down";
-import limit from "express-rate-limit";
 import cookie from "cookie-parser";
+import cors from "cors";
+import express from "express";
+import limit from "express-rate-limit";
+import slow from "express-slow-down";
 import http from "http";
 import ip from "ip";
 import { winstonLogger } from "./config";
-import { RootModule } from "@/modules";
-import { db } from "./db";
 import { envs } from "./constants";
-import { errorHandler } from "./handler";
+import { AppDataSource } from "./db";
+import { errorHandler } from "./middlewares/handler";
 
-const root = new RootModule(db);
+const root = new RootModule(AppDataSource);
 
 const app = express();
 

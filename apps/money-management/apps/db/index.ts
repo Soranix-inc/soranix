@@ -1,9 +1,14 @@
-import { drizzle } from 'drizzle-orm/node-postgres';
-import { Pool } from 'pg';
-import { envs } from '@/constants';
-import * as schema from './schema';
-
-const pool = new Pool({ connectionString: envs.DATABASE_URL });
-export const db = drizzle(pool, {
-  schema,
+import { DataSource } from "typeorm";
+export const AppDataSource = new DataSource({
+	type: "postgres",
+	host: "localhost",
+	port: 5432,
+	username: "test",
+	password: "test",
+	database: "test",
+	synchronize: true,
+	logging: true,
+	entities: [],
+	subscribers: [],
+	migrations: [],
 });

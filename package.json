@@ -41,11 +41,12 @@
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@commitlint/cz-commitlint": "^19.8.1",
+    "@commitlint/prompt-cli": "^19.8.1",
     "@soranix/client": "^0.1.0",
+    "@types/node": "^24.0.8",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
-    "turbo": "^2.5.4",
-    "@commitlint/prompt-cli": "^19.8.1"
+    "turbo": "^2.5.4"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": [
@@ -53,5 +54,11 @@
       "prettier --write"
     ],
     "*.json": "prettier --write"
+  },
+  "dependencies": {
+    "@types/dotenv": "^8.2.3",
+    "pg": "^8.16.3",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.25"
   }
 }

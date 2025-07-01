@@ -1,18 +1,17 @@
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { Pool } from 'pg';
-import express from 'express';
+import express from "express";
+import { DataSource } from "typeorm";
+import { BudgetModule } from "../budgets";
 
-export class RootModule<T extends Record<string, any>> {
-  private readonly router: express.Router;
-  constructor(
-    private readonly db: NodePgDatabase<T> & {
-      $client: Pool;
-    }
-  ) {
-    this.router = express.Router();
-  }
+export class RootModule {
+	private readonly router: express.Router;
+	private readonly budget: BudgetModule;
+	constructor(private readonly db: DataSource) {
+		this.router = express.Router();
+		this.budget = new BudgetModule(this.db);
+	}
 
-  routes = () => {
-    return this.router;
-  };
+	routes = () => {
+		this.router.use(this.budget.routes);
+		return this.router;
+	};
 }
