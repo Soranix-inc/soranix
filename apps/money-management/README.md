@@ -1,1 +1,1 @@
-# SORANIX MONEY-MANAGEMENT
+# soranix money-management

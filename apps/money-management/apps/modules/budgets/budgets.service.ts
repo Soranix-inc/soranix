@@ -1,19 +1,46 @@
+import { NotFoundException } from "@/exception/not-found.exception";
+import { BUDGET_STATE_ENUM, BUDGET_STATUS_ENUM } from "@/libs";
 import { create_helper } from "@/libs/helpers/create.helper";
 import { delete_helper } from "@/libs/helpers/delete.helper";
 import { find_one_by_id_helper } from "@/libs/helpers/find-by-id.helper";
 import { paginate_helper } from "@/libs/helpers/paginate.helper";
 import { update_helper } from "@/libs/helpers/update.helper";
 import { EntityManager, Repository } from "typeorm";
+import { BudgetConfigService } from "../budgetconfig/budgetconfig.service";
 import { CreateBudgetDto } from "./dto/create-budget.dto";
+import { InsertBudgetDto } from "./dto/insert-budget.dto";
 import { UpdateBudgetDto } from "./dto/update-budget.dto";
 import { Budget } from "./entities/budget.entities";
 
 export class BudgetService {
 	/** TODO: add budget config service here also */
-	constructor(private readonly budget: Repository<Budget>) {}
+	constructor(
+		private readonly budget: Repository<Budget>,
+		private readonly budgetconfig: BudgetConfigService
+	) {}
+
+	modify = async (id: string, body: UpdateBudgetDto) => {
+		const { accountId, userId, ...rest } = body;
+		return this.update(id, rest);
+	};
 
 	/** creating new budgets as well as their configurations */
-	initialize = async (body: CreateBudgetDto) => {};
+	initialize = async (body: InsertBudgetDto) => {
+		const config = await this.budgetconfig.findByUserId(body.userId);
+		if (!config) throw new NotFoundException("unable to find configurations");
+		return this.create({
+			accountId: body.accountId,
+			allocatedAmount: body.allocatedAmount ?? config.income_allocation,
+			configuration: body.configuration,
+			description: body.description,
+			isGlobal: body.isGlobal,
+			name: body.name,
+			parentBudget: body.parentBudget,
+			state: BUDGET_STATE_ENUM.ALLOCATED,
+			status: BUDGET_STATUS_ENUM.ON_TRACK,
+			userId: body.userId,
+		});
+	};
 
 	get = async (query: Record<string, any> = {}) => {
 		return paginate_helper(this.budget, query);

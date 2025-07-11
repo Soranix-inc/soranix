@@ -1,8 +1,12 @@
+import { BaseOmit } from "@/index";
 import { BUDGET_STATE_ENUM, BUDGET_STATUS_ENUM } from "@/libs/enums";
+import { Type } from "class-transformer";
 import {
 	IsBoolean,
+	IsEnum,
 	IsNotEmpty,
 	IsNumber,
+	IsObject,
 	IsOptional,
 	IsString,
 	IsUUID,
@@ -10,9 +14,7 @@ import {
 } from "class-validator";
 import { Budget } from "../entities/budget.entities";
 
-export class CreateBudgetDto implements Budget {
-	id!: string;
-
+export class CreateBudgetDto implements BaseOmit<Budget> {
 	@IsNotEmpty()
 	@IsString()
 	name!: string;
@@ -21,11 +23,17 @@ export class CreateBudgetDto implements Budget {
 	@IsString()
 	description!: string;
 
+	@IsNotEmpty()
+	@IsString()
+	@IsEnum(BUDGET_STATUS_ENUM)
 	status!: BUDGET_STATUS_ENUM;
 
 	@IsOptional()
-	parentBudget!: string;
+	parentBudget!: string | undefined;
 
+	@IsNotEmpty()
+	@IsString()
+	@IsEnum(BUDGET_STATE_ENUM)
 	state!: BUDGET_STATE_ENUM;
 
 	@IsNotEmpty()
@@ -47,11 +55,14 @@ export class CreateBudgetDto implements Budget {
 	@IsUUID()
 	accountId!: string;
 
-	configuration: any;
+	@IsNotEmpty()
+	@IsObject()
+	@Type(() => CreateBudgetSettings)
+	configuration!: CreateBudgetSettings;
+}
 
-	createdAt!: Date;
-
-	updatedAt!: Date;
-
-	deletedAt!: Date;
+export class CreateBudgetSettings {
+	@IsNotEmpty()
+	@IsBoolean()
+	isActive!: boolean;
 }

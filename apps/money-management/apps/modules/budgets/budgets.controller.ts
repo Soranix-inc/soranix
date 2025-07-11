@@ -71,7 +71,7 @@ export class BudgetController {
 		try {
 			const id = req.params.id;
 			const updates: UpdateBudgetDto = req.body;
-			const response = await this.service.update(id, updates);
+			const response = await this.service.modify(id, updates);
 			res.json(response);
 		} catch (e) {
 			nxt(e);
