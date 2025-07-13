@@ -15,56 +15,60 @@ import { envs } from "./constants";
 import AppDataSource from "./db";
 import { errorHandler } from "./middlewares/handler";
 
-const root = new RootModule(AppDataSource);
+(async () => {
+	const root = await RootModule.create(AppDataSource);
 
-const app = express();
+	const routes = root.routes();
 
-const server = http.createServer(app);
+	const app = express();
 
-const PORT = envs.PORT;
+	const server = http.createServer(app);
 
-const address = ip.address();
+	const PORT = envs.PORT;
 
-app.use(compression());
+	const address = ip.address();
 
-app.use(
-	slow({
-		windowMs: 15 * 60 * 1000,
-		delayAfter: 5,
-		delayMs: (hits) => hits * 100,
-	})
-);
+	app.use(compression());
 
-app.use(
-	cors({
-		credentials: true,
-		origin: envs.ALLOWED_ORIGINS.split(","),
-	})
-);
-
-app.use(express.json({ limit: envs.JSON_LIMIT }));
-
-app.use(express.urlencoded({ extended: true }));
-
-app.use(cookie());
-
-app.use(
-	limit({
-		windowMs: 15 * 60 * 1000,
-		limit: 100,
-		standardHeaders: "draft-8",
-		legacyHeaders: false,
-	})
-);
-
-app.use(root.routes());
-
-app.use(errorHandler);
-
-server.on("listening", function () {
-	winstonLogger.info(
-		`SERVER ACTIVE ON http://${address}:${PORT} & http://localhost:${PORT}`
+	app.use(
+		slow({
+			windowMs: 15 * 60 * 1000,
+			delayAfter: 5,
+			delayMs: (hits) => hits * 100,
+		})
 	);
-});
 
-server.listen(PORT);
+	app.use(
+		cors({
+			credentials: true,
+			origin: envs.ALLOWED_ORIGINS.split(","),
+		})
+	);
+
+	app.use(express.json({ limit: envs.JSON_LIMIT }));
+
+	app.use(express.urlencoded({ extended: true }));
+
+	app.use(cookie());
+
+	app.use(
+		limit({
+			windowMs: 15 * 60 * 1000,
+			limit: 100,
+			standardHeaders: "draft-8",
+			legacyHeaders: false,
+		})
+	);
+
+	app.use(routes);
+
+	app.use(errorHandler);
+
+	server.on("listening", function () {
+		winstonLogger.info(
+			`SERVER ACTIVE ON http://${address}:${PORT} & http://localhost:${PORT}`
+		);
+	});
+
+	server.listen(PORT);
+})();

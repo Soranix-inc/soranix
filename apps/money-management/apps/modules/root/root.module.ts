@@ -8,11 +8,17 @@ export class RootModule {
 	private readonly budget: BudgetModule;
 	private readonly budgetConfig: BudgetConfigModule;
 
-	constructor(private readonly db: DataSource) {
+	constructor(budget: BudgetModule, budgetConfig: BudgetConfigModule) {
 		this.router = express.Router();
-		this.budget = new BudgetModule(this.db);
-		this.budgetConfig = new BudgetConfigModule(this.db);
+		this.budget = budget;
+		this.budgetConfig = budgetConfig;
 	}
+
+	static create = async (db: DataSource) => {
+		const budget = await BudgetModule.create(db);
+		const budgetConfig = new BudgetConfigModule(db);
+		return new RootModule(budget, budgetConfig);
+	};
 
 	routes = () => {
 		this.router.use(this.budget.routes);
