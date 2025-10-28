@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bills-payment
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: bills-payment
+          resources:
+            requests:
+              cpu: '100m'
+              memory: '128Mi'
+            limits:
+              cpu: '500m'
+              memory: '512Mi'
+          env:
+            - name: NODE_ENV
+              value: 'development'
+            - name: PORT
+              value: '5007'

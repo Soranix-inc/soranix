@@ -28,10 +28,9 @@ RUN --mount=type=cache,target=/app/.npm \
 # Copy everything (code, workspaces, configs)
 COPY --chown=soranix:soranix . .
 
-# ─── 5. Expose Ports for All Workspaces ─────────────
-# (adjust ports to match your apps — e.g., web:3000, api:1990)
-EXPOSE 3000 1990
+# ─── 5. Expose Auth Service Port ───────────────────
+EXPOSE 5001
 
 # ─── 6. Development Entrypoint ─────────────────────
-# Launch Turborepo’s dev pipeline, which will in turn start each workspace in watch mode
-CMD ["turbo", "run", "dev", "--filter=..."]
+# Start the auth service in development mode
+CMD ["npm", "run", "dev"]

@@ -1,0 +1,56 @@
+{
+  "name": "@packages/kafka",
+  "version": "1.0.0",
+  "description": "Apache Kafka integration for Soranix event streaming",
+  "main": "src/index.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./producer": {
+      "import": "./src/producer/kafka-producer.ts",
+      "types": "./src/producer/kafka-producer.ts"
+    },
+    "./consumer": {
+      "import": "./src/consumer/kafka-consumer.ts",
+      "types": "./src/consumer/kafka-consumer.ts"
+    },
+    "./admin": {
+      "import": "./src/admin/kafka-admin.ts",
+      "types": "./src/admin/kafka-admin.ts"
+    },
+    "./topics": {
+      "import": "./src/topics/topic-definitions.ts",
+      "types": "./src/topics/topic-definitions.ts"
+    },
+    "./types": {
+      "import": "./src/types/kafka-types.ts",
+      "types": "./src/types/kafka-types.ts"
+    }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "kafka",
+    "event-streaming",
+    "soranix",
+    "kraft"
+  ],
+  "author": "Soranix Team",
+  "license": "MIT",
+  "dependencies": {
+    "@packages/logging": "*",
+    "kafkajs": "^2.2.4"
+  },
+  "devDependencies": {
+    "@tooling/eslint-config": "*",
+    "@tooling/prettier": "*",
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3"
+  }
+}

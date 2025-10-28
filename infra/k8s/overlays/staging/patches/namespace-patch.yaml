@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: soranix-staging
+  labels:
+    environment: staging
+  annotations:
+    description: 'Soranix Staging Environment'

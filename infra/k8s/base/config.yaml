@@ -1,0 +1,52 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: soranix-config
+  namespace: soranix
+data:
+  # Environment configuration
+  NODE_ENV: 'production'
+  LOG_LEVEL: 'info'
+
+  # Database configuration
+  DB_HOST: 'postgres-service'
+  DB_PORT: '5432'
+  DB_NAME: 'soranix'
+
+  # Redis configuration
+  REDIS_HOST: 'redis-service'
+  REDIS_PORT: '6379'
+
+  # RabbitMQ configuration
+  RABBITMQ_HOST: 'rabbitmq-service'
+  RABBITMQ_PORT: '5672'
+  RABBITMQ_USERNAME: 'soranix'
+  RABBITMQ_VHOST: '/'
+
+  # API configuration
+  API_VERSION: 'v1'
+  CORS_ORIGIN: 'https://app.soranix.com,https://web.soranix.com,https://admin.soranix.com'
+
+  # Feature flags
+  ENABLE_AI_FEATURES: 'true'
+  ENABLE_PAYMENTS: 'true'
+  ENABLE_BANKING: 'true'
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: soranix-secrets
+  namespace: soranix
+type: Opaque
+data:
+  # These are base64 encoded placeholder values
+  # In production, these should be replaced with actual secrets
+  database-url: cG9zdGdyZXNxbDovL3VzZXI6cGFzc3dvcmRAaG9zdDozMzA2L2RhdGFiYXNl
+  jwt-secret: c3VwZXItc2VjcmV0LWp3dC1rZXk=
+  stripe-secret-key: c2tfdGVzdF9zdHJpcGVfc2VjcmV0X2tleQ==
+  openai-api-key: c2stcGxhY2Vob2xkZXItb3BlbmFpLWFwaS1rZXk=
+  redis-password: cmVkaXMtcGFzc3dvcmQ=
+  rabbitmq-password: c29yYW5peA==
+  rabbitmq-username: c29yYW5peA==
+  event-encryption-key: MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWYwMTIzNDU2Nzg5YWJjZGVmMDEyMzQ1Njc4OWFiY2RlZg==

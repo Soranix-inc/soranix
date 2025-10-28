@@ -1,0 +1,213 @@
+{
+  "rabbit_version": "3.12.0",
+  "rabbitmq_version": "3.12.0",
+  "product_name": "RabbitMQ",
+  "product_version": "3.12.0",
+  "users": [
+    {
+      "name": "guest",
+      "password_hash": "guest",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "administrator"
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "guest",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "soranix.financial",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {
+        "x-message-ttl": 604800000,
+        "x-dead-letter-exchange": "soranix.dlx"
+      }
+    },
+    {
+      "name": "soranix.user",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {
+        "x-message-ttl": 604800000,
+        "x-dead-letter-exchange": "soranix.dlx"
+      }
+    },
+    {
+      "name": "soranix.ai",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {
+        "x-message-ttl": 604800000,
+        "x-dead-letter-exchange": "soranix.dlx"
+      }
+    },
+    {
+      "name": "soranix.notification",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {
+        "x-message-ttl": 604800000,
+        "x-dead-letter-exchange": "soranix.dlx"
+      }
+    },
+    {
+      "name": "soranix.audit",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {
+        "x-message-ttl": 2592000000
+      }
+    },
+    {
+      "name": "soranix.dlx",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {
+        "x-message-ttl": 86400000
+      }
+    }
+  ],
+  "queues": [
+    {
+      "name": "payments.processing",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-message-ttl": 300000,
+        "x-dead-letter-exchange": "soranix.dlx",
+        "x-dead-letter-routing-key": "dlx.financial",
+        "x-max-retries": 3
+      }
+    },
+    {
+      "name": "user.registration",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-message-ttl": 604800000,
+        "x-dead-letter-exchange": "soranix.dlx",
+        "x-dead-letter-routing-key": "dlx.user"
+      }
+    },
+    {
+      "name": "notifications.email",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-message-ttl": 604800000,
+        "x-dead-letter-exchange": "soranix.dlx",
+        "x-dead-letter-routing-key": "dlx.notification"
+      }
+    },
+    {
+      "name": "dlx.financial",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-message-ttl": 86400000
+      }
+    },
+    {
+      "name": "dlx.user",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-message-ttl": 86400000
+      }
+    },
+    {
+      "name": "dlx.notification",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-message-ttl": 86400000
+      }
+    }
+  ],
+  "bindings": [
+    {
+      "source": "soranix.financial",
+      "vhost": "/",
+      "destination": "payments.processing",
+      "destination_type": "queue",
+      "routing_key": "payment.*",
+      "arguments": {}
+    },
+    {
+      "source": "soranix.user",
+      "vhost": "/",
+      "destination": "user.registration",
+      "destination_type": "queue",
+      "routing_key": "user.registered",
+      "arguments": {}
+    },
+    {
+      "source": "soranix.notification",
+      "vhost": "/",
+      "destination": "notifications.email",
+      "destination_type": "queue",
+      "routing_key": "notification.email",
+      "arguments": {}
+    },
+    {
+      "source": "soranix.dlx",
+      "vhost": "/",
+      "destination": "dlx.financial",
+      "destination_type": "queue",
+      "routing_key": "dlx.financial",
+      "arguments": {}
+    },
+    {
+      "source": "soranix.dlx",
+      "vhost": "/",
+      "destination": "dlx.user",
+      "destination_type": "queue",
+      "routing_key": "dlx.user",
+      "arguments": {}
+    },
+    {
+      "source": "soranix.dlx",
+      "vhost": "/",
+      "destination": "dlx.notification",
+      "destination_type": "queue",
+      "routing_key": "dlx.notification",
+      "arguments": {}
+    }
+  ]
+}

@@ -1,16 +1,16 @@
-module.exports = {
-  trailingComma: "es5",
+export default {
+  trailingComma: 'es5',
   bracketSpacing: true,
   printWidth: 120,
-  proseWrap: "preserve",
+  proseWrap: 'preserve',
   semi: true,
   singleQuote: true,
   tabWidth: 2,
   useTabs: false,
-  arrowParens: "always",
+  arrowParens: 'always',
   overrides: [
     {
-      files: "*.json",
+      files: '*.json',
       options: {
         singleQuote: false,
       },

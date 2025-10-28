@@ -6,7 +6,7 @@
     "ui",
     "package"
   ],
-  "exports":{
+  "exports": {
     "./components": "./src/components/index.ts",
     "./lib": "./src/lib/index.ts",
     "./hooks": "./src/hooks/index.ts"
@@ -23,9 +23,19 @@
   "author": "https://github.com/wealthralph",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1"
+  },
+  "devDependencies": {
+    "@tooling/eslint-config": "*",
+    "@tooling/prettier": "*",
+    "@tooling/typescript": "*",
+    "eslint": "^9.29.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3"
   }
 }

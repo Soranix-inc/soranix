@@ -1,5 +1,8 @@
-import base from "@tooling/eslint-config/api.lint"
+import base from '@tooling/eslint-config/api.lint.js';
 
 export default [
-    ...base
-]
+  ...base,
+  {
+    ignores: ['dist/**/*', '*.config.js', '*.config.mjs'],
+  },
+];

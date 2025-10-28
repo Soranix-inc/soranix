@@ -1,0 +1,34 @@
+FROM node:24-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 payments && \
+    chown -R payments:nodejs /app
+
+USER payments
+
+# ─── Expose Port ───────────────────────────────
+EXPOSE 5004
+
+# ─── Development Entrypoint ────────────────────
+CMD ["npm", "run", "dev"]
+
+
+
+
+
+
+
+
+

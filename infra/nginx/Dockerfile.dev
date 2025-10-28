@@ -1,7 +1,17 @@
-FROM  nginx:1.27.5-alpine
+FROM nginx:1.27.5-alpine
 
-COPY default.conf /etc/nginx/default.conf
+# Remove default nginx config
+RUN rm /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+# Copy our custom nginx config
+COPY default.conf /etc/nginx/conf.d/default.conf
 
-CMD [ "nginx", "-g", "daemon off;" ]
+# Create nginx user and set permissions
+RUN addgroup -g 101 -S nginx && \
+    adduser -S -D -H -u 101 -h /var/cache/nginx -s /sbin/nologin -G nginx -g nginx nginx
+
+# Expose ports
+EXPOSE 80 443
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]

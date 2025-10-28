@@ -18,8 +18,8 @@
     "format": "turbo run format",
     "start:env": "node scripts/start.js",
     "prepare": "husky",
-    "commitlint": " commitlint --edit -c  ",
-    "commit": "commit"
+    "commitlint": "commitlint --edit",
+    "commit": "git-cz"
   },
   "repository": {
     "type": "git",
@@ -42,16 +42,22 @@
     "@commitlint/config-conventional": "^19.8.1",
     "@commitlint/cz-commitlint": "^19.8.1",
     "@soranix/client": "^0.1.0",
+    "commitizen": "^4.3.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
     "turbo": "^2.5.4",
     "@commitlint/prompt-cli": "^19.8.1"
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": [
+    "*.{js,ts,tsx,jsx}": [
       "eslint --fix",
       "prettier --write"
     ],
-    "*.json": "prettier --write"
+    "*.{json,md,yml,yaml,css,scss}": "prettier --write"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
   }
 }

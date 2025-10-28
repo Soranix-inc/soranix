@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/server.js",
-    "dev": " tsx watch --include src/* src/server.ts  "
+    "dev": " tsx watch --include src/* src/server.ts  ",
+    "lint": "eslint .",
+    "format": "prettier --write ."
   },
   "repository": {
     "type": "git",
@@ -24,22 +26,49 @@
   },
   "homepage": "https://github.com/Soranix-inc/soranix#readme",
   "dependencies": {
+    "@packages/errors": "*",
+    "@packages/events": "*",
     "@packages/logging": "*",
+    "@packages/middleware": "*",
+    "@packages/rabbitmq": "*",
+    "@packages/tracing": "*",
+    "@packages/utils": "*",
     "@tooling/eslint-config": "*",
     "axios": "^1.9.0",
+    "bcrypt": "^5.1.1",
     "body-parser": "^2.2.0",
+    "drizzle-orm": "^0.44.2",
     "chalk": "^5.4.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "cryptr": "^6.3.0",
     "dotenv": "^16.5.0",
-    "drizzle-orm": "^0.44.2",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
     "express-useragent": "^1.0.15",
+    "geoip-lite": "^1.4.7",
+    "pg": "^8.16.0",
     "jsonwebtoken": "^9.0.2",
-    "pg": "^8.16.0"
+    "redis": "^4.6.13",
+    "ua-parser-js": "^1.0.37",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@tooling/prettier": "*",
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.6",
+    "@types/pg": "^8.10.9",
+    "drizzle-kit": "^0.20.6",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^4.17.21",
+    "@types/geoip-lite": "^1.4.4",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.10.0",
+    "@types/ua-parser-js": "^0.7.39",
+    "@types/uuid": "^9.0.7",
+    "eslint": "^9.29.0",
     "nodemon": "^3.1.10",
+    "prettier": "^3.5.3",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
   }

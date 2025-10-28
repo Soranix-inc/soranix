@@ -1,0 +1,76 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  namespace: soranix
+  labels:
+    app: auth
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: auth
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: auth
+        tier: backend
+    spec:
+      serviceAccountName: soranix-sa
+      containers:
+        - name: auth
+          image: soranix/auth:latest
+          ports:
+            - containerPort: 5000
+              name: http
+          resources:
+            requests:
+              cpu: '200m'
+              memory: '256Mi'
+            limits:
+              cpu: '1000m'
+              memory: '1Gi'
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          env:
+            - name: NODE_ENV
+              value: 'production'
+            - name: PORT
+              value: '5000'
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: soranix-secrets
+                  key: database-url
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  namespace: soranix
+  labels:
+    app: auth
+    tier: backend
+spec:
+  selector:
+    app: auth
+    tier: backend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5000
+      protocol: TCP
+  type: ClusterIP

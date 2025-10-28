@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  # Frontend Applications
+  soranix-client:
+    build:
+      context: ./apps/client
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    networks:
+      - soranix
+
+  # Backend Services
+  soranix-auth:
+    build:
+      context: ./services/auth
+      dockerfile: Dockerfile
+    ports:
+      - '5001:5001'
+    environment:
+      - NODE_ENV=production
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=guest
+      - RABBITMQ_PASSWORD=guest
+      - EVENT_ENCRYPTION_KEY=0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+    depends_on:
+      - rabbitmq
+    networks:
+      - soranix
+
+  # Infrastructure Services
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: soranix-rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_VHOST=/
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./infra/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    networks:
+      - soranix
+    healthcheck:
+      test: ['CMD', 'rabbitmq-diagnostics', 'ping']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  soranix-nginx:
+    build:
+      context: ./infra/nginx
+      dockerfile: Dockerfile
+    ports:
+      - '80:80'
+      - '443:443'
+    depends_on:
+      - soranix-client
+      - soranix-auth
+    volumes:
+      - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - soranix
+
+networks:
+  soranix:
+    driver: bridge
+
+volumes:
+  rabbitmq_data:
+    driver: local

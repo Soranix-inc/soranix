@@ -1,0 +1,112 @@
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: client-hpa
+spec:
+  minReplicas: 2
+  maxReplicas: 8
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: web-hpa
+spec:
+  minReplicas: 2
+  maxReplicas: 8
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: auth-hpa
+spec:
+  minReplicas: 2
+  maxReplicas: 8
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ai-hpa
+spec:
+  minReplicas: 2
+  maxReplicas: 15
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: banking-hpa
+spec:
+  minReplicas: 2
+  maxReplicas: 8
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: payments-hpa
+spec:
+  minReplicas: 2
+  maxReplicas: 8
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: users-hpa
+spec:
+  minReplicas: 2
+  maxReplicas: 8
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: money-management-hpa
+spec:
+  minReplicas: 2
+  maxReplicas: 8
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: transfers-hpa
+spec:
+  minReplicas: 2
+  maxReplicas: 8
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: bills-payment-hpa
+spec:
+  minReplicas: 2
+  maxReplicas: 8
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: notification-hpa
+spec:
+  minReplicas: 2
+  maxReplicas: 8
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: flows-hpa
+spec:
+  minReplicas: 2
+  maxReplicas: 8
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: portfolio-hpa
+spec:
+  minReplicas: 2
+  maxReplicas: 8
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: billing-hpa
+spec:
+  minReplicas: 2
+  maxReplicas: 8

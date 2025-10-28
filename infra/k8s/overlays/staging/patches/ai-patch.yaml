@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: ai
+          resources:
+            requests:
+              cpu: '500m'
+              memory: '512Mi'
+            limits:
+              cpu: '2000m'
+              memory: '2Gi'
+          env:
+            - name: NODE_ENV
+              value: 'staging'
+            - name: PORT
+              value: '5001'

@@ -1,0 +1,33 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: soranix
+
+resources:
+  - namespace.yaml
+  - rbac.yaml
+  - network-policies.yaml
+  - client-app.yaml
+  - web-app.yaml
+  - admin-app.yaml
+  - auth-service.yaml
+  - ai-service.yaml
+  - banking-service.yaml
+  - payments-service.yaml
+  - users-service.yaml
+  - money-management-service.yaml
+  - transfers-service.yaml
+  - bills-payment-service.yaml
+  - notification-service.yaml
+  - flows-service.yaml
+  - portfolio-service.yaml
+  - billing-service.yaml
+  - rabbitmq-service.yaml
+  - hpa.yaml
+  - ingress.yaml
+  - config.yaml
+
+commonLabels:
+  app.kubernetes.io/name: soranix
+  app.kubernetes.io/part-of: soranix-platform
+  app.kubernetes.io/managed-by: kustomize

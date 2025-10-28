@@ -3,25 +3,33 @@ kind: Config
 metadata:
   name: soranix
 build:
-  local: 
+  local:
     push: false
   artifacts:
     - image: soranix/auth
       context: services/auth
       docker:
         dockerfile: Dockerfile.dev
+    - image: soranix/client
+      context: apps/client
+      docker:
+        dockerfile: Dockerfile.dev
+    - image: soranix/nginx
+      context: infra/nginx
+      docker:
+        dockerfile: Dockerfile.dev
 manifests:
   kustomize:
     paths:
-      - infra\k8s\base
+      - infra/k8s/base
 profiles:
   - name: development
     manifests:
       kustomize:
         paths:
-          - infra\k8s\overlays\development
+          - infra/k8s/overlays/development
   - name: production
     manifests:
       kustomize:
         paths:
-          - infra\k8s\overlays\production
+          - infra/k8s/overlays/production

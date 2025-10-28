@@ -1,0 +1,48 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: soranix-prod
+
+resources:
+  - ../../base
+
+patches:
+  - path: patches/namespace-patch.yaml
+  - path: patches/client-patch.yaml
+  - path: patches/web-patch.yaml
+  - path: patches/admin-patch.yaml
+  - path: patches/auth-patch.yaml
+  - path: patches/ai-patch.yaml
+  - path: patches/banking-patch.yaml
+  - path: patches/payments-patch.yaml
+  - path: patches/users-patch.yaml
+  - path: patches/money-management-patch.yaml
+  - path: patches/transfers-patch.yaml
+  - path: patches/bills-payment-patch.yaml
+  - path: patches/notification-patch.yaml
+  - path: patches/flows-patch.yaml
+  - path: patches/portfolio-patch.yaml
+  - path: patches/billing-patch.yaml
+  - path: patches/ingress-patch.yaml
+  - path: patches/config-patch.yaml
+  - path: patches/hpa-patch.yaml
+
+configMapGenerator:
+  - name: soranix-config
+    behavior: merge
+    literals:
+      - NODE_ENV=production
+      - LOG_LEVEL=warn
+      - CORS_ORIGIN=https://app.soranix.com,https://web.soranix.com,https://admin.soranix.com
+
+secretGenerator:
+  - name: soranix-secrets
+    behavior: merge
+    literals:
+      - database-url=postgresql://user:password@prod-db:5432/soranix_prod
+      - jwt-secret=prod-jwt-secret-key
+      - stripe-secret-key=sk_live_stripe_secret_key
+      - openai-api-key=sk-prod-openai-api-key
+
+commonLabels:
+  environment: production

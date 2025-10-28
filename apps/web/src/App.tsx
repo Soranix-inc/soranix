@@ -1,13 +1,5 @@
-import { useState } from 'react'
-
-
 function App() {
-
-  return (
-    <div >
-      soranix
-    </div>
-  )
+  return <div>soranix</div>;
 }
 
-export default App
+export default App;

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: client
+          resources:
+            requests:
+              cpu: '100m'
+              memory: '128Mi'
+            limits:
+              cpu: '500m'
+              memory: '512Mi'
+          env:
+            - name: NODE_ENV
+              value: 'staging'
+            - name: NEXT_PUBLIC_API_URL
+              value: 'https://staging.api.soranix.com'

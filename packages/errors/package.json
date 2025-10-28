@@ -1,0 +1,37 @@
+{
+  "name": "@packages/errors",
+  "version": "1.0.0",
+  "description": "Error handling utilities for Soranix platform",
+  "main": "src/index.js",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js",
+    "./types": "./src/types/index.js",
+    "./middleware": "./src/middleware/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write src/**/*.ts"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "@packages/tracing": "*"
+  },
+  "devDependencies": {
+    "@tooling/eslint-config": "*",
+    "@tooling/prettier": "*",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "error",
+    "handling",
+    "middleware",
+    "express",
+    "typescript"
+  ],
+  "author": "Soranix Team",
+  "license": "MIT"
+}

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: client
+          resources:
+            requests:
+              cpu: '50m'
+              memory: '64Mi'
+            limits:
+              cpu: '200m'
+              memory: '256Mi'
+          env:
+            - name: NODE_ENV
+              value: 'development'
+            - name: NEXT_PUBLIC_API_URL
+              value: 'http://localhost:5000'

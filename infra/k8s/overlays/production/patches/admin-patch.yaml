@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+        - name: admin
+          resources:
+            requests:
+              cpu: '200m'
+              memory: '256Mi'
+            limits:
+              cpu: '1000m'
+              memory: '1Gi'
+          env:
+            - name: NODE_ENV
+              value: 'production'
+            - name: API_URL
+              value: 'https://api.soranix.com'

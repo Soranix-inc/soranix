@@ -1,0 +1,447 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+  namespace: soranix
+  labels:
+    app: rabbitmq
+    tier: messaging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq
+      tier: messaging
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+        tier: messaging
+    spec:
+      serviceAccountName: soranix-sa
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:3.12-management
+          ports:
+            - containerPort: 5672
+              name: amqp
+            - containerPort: 15672
+              name: management
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: soranix-secrets
+                  key: rabbitmq-username
+            - name: RABBITMQ_DEFAULT_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: soranix-secrets
+                  key: rabbitmq-password
+            - name: RABBITMQ_DEFAULT_VHOST
+              value: '/'
+          resources:
+            requests:
+              cpu: '200m'
+              memory: '512Mi'
+            limits:
+              cpu: '1000m'
+              memory: '2Gi'
+          livenessProbe:
+            exec:
+              command:
+                - rabbitmq-diagnostics
+                - ping
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+                - rabbitmq-diagnostics
+                - ping
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          volumeMounts:
+            - name: rabbitmq-data
+              mountPath: /var/lib/rabbitmq
+            - name: rabbitmq-config
+              mountPath: /etc/rabbitmq/rabbitmq.conf
+              subPath: rabbitmq.conf
+            - name: rabbitmq-definitions
+              mountPath: /etc/rabbitmq/definitions.json
+              subPath: definitions.json
+      volumes:
+        - name: rabbitmq-data
+          persistentVolumeClaim:
+            claimName: rabbitmq-pvc
+        - name: rabbitmq-config
+          configMap:
+            name: rabbitmq-config
+        - name: rabbitmq-definitions
+          configMap:
+            name: rabbitmq-definitions
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-service
+  namespace: soranix
+  labels:
+    app: rabbitmq
+    tier: messaging
+spec:
+  selector:
+    app: rabbitmq
+    tier: messaging
+  ports:
+    - name: amqp
+      port: 5672
+      targetPort: 5672
+      protocol: TCP
+    - name: management
+      port: 15672
+      targetPort: 15672
+      protocol: TCP
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rabbitmq-pvc
+  namespace: soranix
+  labels:
+    app: rabbitmq
+    tier: messaging
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-config
+  namespace: soranix
+  labels:
+    app: rabbitmq
+    tier: messaging
+data:
+  rabbitmq.conf: |
+    # RabbitMQ Configuration for Soranix Production
+
+    # Network settings
+    listeners.tcp.default = 5672
+    management.tcp.port = 15672
+
+    # Memory and disk limits
+    vm_memory_high_watermark.relative = 0.6
+    disk_free_limit.relative = 2.0
+
+    # Logging
+    log.console = true
+    log.console.level = info
+    log.file = true
+    log.file.level = info
+    log.file.rotation.date = $D0
+    log.file.rotation.size = 10485760
+
+    # Performance settings
+    channel_max = 2047
+    frame_max = 131072
+    heartbeat = 60
+
+    # Queue settings
+    queue_master_locator = min-masters
+
+    # Clustering (disabled for single node)
+    cluster_formation.peer_discovery_backend = none
+
+    # Management plugin settings
+    management.load_definitions = /etc/rabbitmq/definitions.json
+    management.http_log_dir = /var/log/rabbitmq/management-access.log
+
+    # Security settings
+    auth_mechanisms.1 = PLAIN
+    auth_mechanisms.2 = AMQPLAIN
+
+    # Message persistence
+    default_user_tags.administrator = true
+
+    # Connection limits
+    num_acceptors.tcp = 10
+    handshake_timeout = 10000
+
+    # Memory management
+    vm_memory_high_watermark_paging_ratio = 0.5
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-definitions
+  namespace: soranix
+  labels:
+    app: rabbitmq
+    tier: messaging
+data:
+  definitions.json: |
+    {
+      "rabbit_version": "3.12.0",
+      "rabbitmq_version": "3.12.0",
+      "product_name": "RabbitMQ",
+      "product_version": "3.12.0",
+      "users": [
+        {
+          "name": "soranix",
+          "password_hash": "soranix",
+          "hashing_algorithm": "rabbit_password_hashing_sha256",
+          "tags": "administrator"
+        }
+      ],
+      "vhosts": [
+        {
+          "name": "/"
+        }
+      ],
+      "permissions": [
+        {
+          "user": "soranix",
+          "vhost": "/",
+          "configure": ".*",
+          "write": ".*",
+          "read": ".*"
+        }
+      ],
+      "exchanges": [
+        {
+          "name": "soranix.financial",
+          "vhost": "/",
+          "type": "topic",
+          "durable": true,
+          "auto_delete": false,
+          "internal": false,
+          "arguments": {
+            "x-message-ttl": 604800000,
+            "x-dead-letter-exchange": "soranix.dlx"
+          }
+        },
+        {
+          "name": "soranix.user",
+          "vhost": "/",
+          "type": "topic",
+          "durable": true,
+          "auto_delete": false,
+          "internal": false,
+          "arguments": {
+            "x-message-ttl": 604800000,
+            "x-dead-letter-exchange": "soranix.dlx"
+          }
+        },
+        {
+          "name": "soranix.ai",
+          "vhost": "/",
+          "type": "topic",
+          "durable": true,
+          "auto_delete": false,
+          "internal": false,
+          "arguments": {
+            "x-message-ttl": 604800000,
+            "x-dead-letter-exchange": "soranix.dlx"
+          }
+        },
+        {
+          "name": "soranix.notification",
+          "vhost": "/",
+          "type": "topic",
+          "durable": true,
+          "auto_delete": false,
+          "internal": false,
+          "arguments": {
+            "x-message-ttl": 604800000,
+            "x-dead-letter-exchange": "soranix.dlx"
+          }
+        },
+        {
+          "name": "soranix.audit",
+          "vhost": "/",
+          "type": "topic",
+          "durable": true,
+          "auto_delete": false,
+          "internal": false,
+          "arguments": {
+            "x-message-ttl": 2592000000
+          }
+        },
+        {
+          "name": "soranix.dlx",
+          "vhost": "/",
+          "type": "topic",
+          "durable": true,
+          "auto_delete": false,
+          "internal": false,
+          "arguments": {
+            "x-message-ttl": 86400000
+          }
+        }
+      ],
+      "queues": [
+        {
+          "name": "payments.processing",
+          "vhost": "/",
+          "durable": true,
+          "auto_delete": false,
+          "arguments": {
+            "x-message-ttl": 300000,
+            "x-dead-letter-exchange": "soranix.dlx",
+            "x-dead-letter-routing-key": "dlx.financial",
+            "x-max-retries": 3
+          }
+        },
+        {
+          "name": "transfers.processing",
+          "vhost": "/",
+          "durable": true,
+          "auto_delete": false,
+          "arguments": {
+            "x-message-ttl": 300000,
+            "x-dead-letter-exchange": "soranix.dlx",
+            "x-dead-letter-routing-key": "dlx.financial",
+            "x-max-retries": 3
+          }
+        },
+        {
+          "name": "bills.processing",
+          "vhost": "/",
+          "durable": true,
+          "auto_delete": false,
+          "arguments": {
+            "x-message-ttl": 300000,
+            "x-dead-letter-exchange": "soranix.dlx",
+            "x-dead-letter-routing-key": "dlx.financial",
+            "x-max-retries": 3
+          }
+        },
+        {
+          "name": "user.registration",
+          "vhost": "/",
+          "durable": true,
+          "auto_delete": false,
+          "arguments": {
+            "x-message-ttl": 604800000,
+            "x-dead-letter-exchange": "soranix.dlx",
+            "x-dead-letter-routing-key": "dlx.user"
+          }
+        },
+        {
+          "name": "notifications.email",
+          "vhost": "/",
+          "durable": true,
+          "auto_delete": false,
+          "arguments": {
+            "x-message-ttl": 604800000,
+            "x-dead-letter-exchange": "soranix.dlx",
+            "x-dead-letter-routing-key": "dlx.notification"
+          }
+        },
+        {
+          "name": "dlx.financial",
+          "vhost": "/",
+          "durable": true,
+          "auto_delete": false,
+          "arguments": {
+            "x-message-ttl": 86400000
+          }
+        },
+        {
+          "name": "dlx.user",
+          "vhost": "/",
+          "durable": true,
+          "auto_delete": false,
+          "arguments": {
+            "x-message-ttl": 86400000
+          }
+        },
+        {
+          "name": "dlx.notification",
+          "vhost": "/",
+          "durable": true,
+          "auto_delete": false,
+          "arguments": {
+            "x-message-ttl": 86400000
+          }
+        }
+      ],
+      "bindings": [
+        {
+          "source": "soranix.financial",
+          "vhost": "/",
+          "destination": "payments.processing",
+          "destination_type": "queue",
+          "routing_key": "payment.*",
+          "arguments": {}
+        },
+        {
+          "source": "soranix.financial",
+          "vhost": "/",
+          "destination": "transfers.processing",
+          "destination_type": "queue",
+          "routing_key": "transfer.*",
+          "arguments": {}
+        },
+        {
+          "source": "soranix.financial",
+          "vhost": "/",
+          "destination": "bills.processing",
+          "destination_type": "queue",
+          "routing_key": "bill.*",
+          "arguments": {}
+        },
+        {
+          "source": "soranix.user",
+          "vhost": "/",
+          "destination": "user.registration",
+          "destination_type": "queue",
+          "routing_key": "user.registered",
+          "arguments": {}
+        },
+        {
+          "source": "soranix.notification",
+          "vhost": "/",
+          "destination": "notifications.email",
+          "destination_type": "queue",
+          "routing_key": "notification.email",
+          "arguments": {}
+        },
+        {
+          "source": "soranix.dlx",
+          "vhost": "/",
+          "destination": "dlx.financial",
+          "destination_type": "queue",
+          "routing_key": "dlx.financial",
+          "arguments": {}
+        },
+        {
+          "source": "soranix.dlx",
+          "vhost": "/",
+          "destination": "dlx.user",
+          "destination_type": "queue",
+          "routing_key": "dlx.user",
+          "arguments": {}
+        },
+        {
+          "source": "soranix.dlx",
+          "vhost": "/",
+          "destination": "dlx.notification",
+          "destination_type": "queue",
+          "routing_key": "dlx.notification",
+          "arguments": {}
+        }
+      ]
+    }

@@ -1,0 +1,61 @@
+{
+  "name": "@packages/utils",
+  "version": "1.0.0",
+  "description": "Shared utilities for Soranix platform",
+  "main": "src/index.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./jwt": {
+      "import": "./src/jwt/index.ts",
+      "types": "./src/jwt/index.ts"
+    },
+    "./jwt/signer": {
+      "import": "./src/jwt/jwt-signer.ts",
+      "types": "./src/jwt/jwt-signer.ts"
+    },
+    "./jwt/verifier": {
+      "import": "./src/jwt/jwt-verifier.ts",
+      "types": "./src/jwt/jwt-verifier.ts"
+    },
+    "./jwt/key-loader": {
+      "import": "./src/jwt/key-loader.ts",
+      "types": "./src/jwt/key-loader.ts"
+    },
+    "./jwt/types": {
+      "import": "./src/jwt/jwt-types.ts",
+      "types": "./src/jwt/jwt-types.ts"
+    },
+    "./idempotency": {
+      "import": "./src/idempotency/index.ts",
+      "types": "./src/idempotency/index.ts"
+    }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "utilities",
+    "jwt",
+    "soranix"
+  ],
+  "author": "Soranix Team",
+  "license": "MIT",
+  "dependencies": {
+    "@packages/config": "*",
+    "@packages/logging": "*",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@tooling/eslint-config": "*",
+    "@tooling/prettier": "*",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3"
+  }
+}

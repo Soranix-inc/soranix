@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: notification
+          resources:
+            requests:
+              cpu: '200m'
+              memory: '256Mi'
+            limits:
+              cpu: '1000m'
+              memory: '1Gi'
+          env:
+            - name: NODE_ENV
+              value: 'staging'
+            - name: PORT
+              value: '5008'

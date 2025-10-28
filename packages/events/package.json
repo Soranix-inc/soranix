@@ -1,0 +1,36 @@
+{
+  "name": "@packages/events",
+  "version": "1.0.0",
+  "description": "Event definitions and infrastructure for Soranix",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "keywords": [
+    "events",
+    "messaging",
+    "rabbitmq"
+  ],
+  "author": "Soranix",
+  "license": "ISC",
+  "dependencies": {
+    "@packages/kafka": "*",
+    "@packages/rabbitmq": "*",
+    "@packages/logging": "*",
+    "amqplib": "^0.10.9",
+    "crypto": "^1.0.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@tooling/eslint-config": "*",
+    "@tooling/prettier": "*",
+    "@tooling/typescript": "*",
+    "@types/amqplib": "^0.10.7",
+    "@types/uuid": "^9.0.8",
+    "eslint": "^9.29.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3"
+  }
+}

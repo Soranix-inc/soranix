@@ -1,0 +1,16 @@
+# Ignore private keys - NEVER commit these!
+private.key
+*.key.pem
+*.pem
+
+# Keep public keys (safe to commit)
+!public.key
+!*.pub
+
+
+
+
+
+
+
+

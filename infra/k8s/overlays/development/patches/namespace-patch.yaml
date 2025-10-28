@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: soranix-dev
+  labels:
+    environment: development
+  annotations:
+    description: 'Soranix Development Environment'

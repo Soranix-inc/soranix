@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: soranix-prod
+  labels:
+    environment: production
+  annotations:
+    description: 'Soranix Production Environment'

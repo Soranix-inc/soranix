@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billing
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: billing
+          resources:
+            requests:
+              cpu: '200m'
+              memory: '256Mi'
+            limits:
+              cpu: '1000m'
+              memory: '1Gi'
+          env:
+            - name: NODE_ENV
+              value: 'staging'
+            - name: PORT
+              value: '5011'

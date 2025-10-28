@@ -1,0 +1,36 @@
+{
+  "name": "@packages/metrics",
+  "version": "1.0.0",
+  "description": "Metrics utilities for Soranix platform (Prometheus integration)",
+  "main": "src/index.js",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js",
+    "./types": "./src/types/index.js",
+    "./prometheus": "./src/prometheus/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write src/**/*.ts"
+  },
+  "dependencies": {
+    "prom-client": "^15.0.0",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@tooling/eslint-config": "*",
+    "@tooling/prettier": "*",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "metrics",
+    "prometheus",
+    "monitoring",
+    "observability"
+  ],
+  "author": "Soranix Team",
+  "license": "MIT"
+}

@@ -1,0 +1,43 @@
+{
+  "name": "@packages/config",
+  "version": "1.0.0",
+  "description": "Shared configuration for Soranix services",
+  "main": "src/index.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./redis": {
+      "import": "./src/redis/index.ts",
+      "types": "./src/redis/index.ts"
+    },
+    "./redis/connection": {
+      "import": "./src/redis/connection.ts",
+      "types": "./src/redis/connection.ts"
+    }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "config",
+    "redis",
+    "soranix"
+  ],
+  "author": "Soranix Team",
+  "license": "MIT",
+  "dependencies": {
+    "@packages/logging": "*",
+    "ioredis": "^5.3.2"
+  },
+  "devDependencies": {
+    "@tooling/eslint-config": "*",
+    "@tooling/prettier": "*",
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3"
+  }
+}

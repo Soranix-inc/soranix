@@ -1,8 +1,6 @@
 events {
 }
 
-
-
 http {
     sendfile on;
 
