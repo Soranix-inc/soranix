@@ -47,3 +47,4 @@ export async function closeDatabaseConnection(): Promise<void> {
   await pool.end();
   systemLogger.info('Database connection pool closed');
 }
+

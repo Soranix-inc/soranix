@@ -86,3 +86,4 @@ export interface GetBillersParams {
   country?: string;
   isActive?: boolean;
 }
+

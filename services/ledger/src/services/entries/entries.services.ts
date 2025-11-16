@@ -28,3 +28,4 @@ class EntriesServices {
 }
 
 export default EntriesServices;
+

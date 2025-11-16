@@ -88,3 +88,4 @@ export class EventRouter {
     return transportType === transport || transportType === 'both';
   }
 }
+

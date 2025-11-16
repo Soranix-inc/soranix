@@ -207,3 +207,4 @@ export const EVENT_CATEGORIES = {
 } as const;
 
 export type EventCategory = (typeof EVENT_CATEGORIES)[keyof typeof EVENT_CATEGORIES];
+

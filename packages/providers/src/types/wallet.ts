@@ -67,3 +67,4 @@ export interface WalletTransferResult {
   status: TransactionStatus;
   message: string;
 }
+

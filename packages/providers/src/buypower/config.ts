@@ -16,3 +16,4 @@ export const BUYPOWER_ENDPOINTS = {
   },
   HEALTH: '/health',
 } as const;
+

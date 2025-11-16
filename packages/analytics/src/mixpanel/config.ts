@@ -21,3 +21,4 @@ export const getMixpanelConfig = (): MixpanelConfig => {
     agent: process.env.MIXPANEL_AGENT || 'soranix-analytics',
   };
 };
+

@@ -47,3 +47,4 @@ export interface EventTransport {
    */
   isHealthy(): Promise<boolean>;
 }
+

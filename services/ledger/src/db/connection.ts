@@ -52,3 +52,4 @@ export async function closeDatabase() {
 
 // Export for use in other files
 export { schema };
+

@@ -23,3 +23,4 @@ export const getPrometheusConfig = (): PrometheusConfig => {
     },
   };
 };
+

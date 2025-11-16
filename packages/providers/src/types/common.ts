@@ -52,3 +52,4 @@ export interface RetryConfig {
   backoffMultiplier: number;
   retryCondition?: (error: any) => boolean;
 }
+

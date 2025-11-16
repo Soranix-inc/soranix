@@ -21,3 +21,4 @@ class AccountsRoutes {
 }
 
 export default AccountsRoutes;
+

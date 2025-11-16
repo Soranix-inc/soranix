@@ -77,3 +77,4 @@ export const deviceConfig = {
 export const passwordHistoryConfig = {
   keepLastNPasswords: parseInt(process.env.PASSWORD_HISTORY_COUNT || '5'), // Keep last 5 passwords
 };
+

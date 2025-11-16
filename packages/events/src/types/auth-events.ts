@@ -297,3 +297,4 @@ export const createSessionRevokedEvent = (data: SessionRevokedData) => new Sessi
 export const createAllSessionsRevokedEvent = (data: AllSessionsRevokedData) => new AllSessionsRevokedEvent(data);
 
 export const createRefreshTokenRotatedEvent = (data: RefreshTokenRotatedData) => new RefreshTokenRotatedEvent(data);
+

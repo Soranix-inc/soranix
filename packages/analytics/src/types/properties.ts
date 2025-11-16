@@ -75,3 +75,4 @@ export interface LocationProperties {
   $timezone?: string;
   $ip?: string;
 }
+

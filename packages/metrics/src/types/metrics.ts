@@ -84,3 +84,4 @@ export interface PrometheusConfig {
   prefix?: string;
   labels?: Record<string, string>;
 }
+

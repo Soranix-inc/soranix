@@ -29,3 +29,4 @@ export const TAGPAY_ENDPOINTS = {
   },
   HEALTH: '/health',
 } as const;
+

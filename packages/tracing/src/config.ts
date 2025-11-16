@@ -19,3 +19,4 @@ export const getTracingConfig = (): TracingConfig => {
     enabled: process.env.TRACING_ENABLED !== 'false',
   };
 };
+

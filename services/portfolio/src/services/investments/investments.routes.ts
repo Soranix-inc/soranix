@@ -22,3 +22,4 @@ class InvestmentsRoutes {
 }
 
 export default InvestmentsRoutes;
+

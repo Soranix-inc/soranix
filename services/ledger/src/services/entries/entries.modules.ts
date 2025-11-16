@@ -15,3 +15,4 @@ class EntriesModules {
 }
 
 export default EntriesModules;
+

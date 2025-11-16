@@ -50,3 +50,4 @@ class EntriesControllers {
 }
 
 export default EntriesControllers;
+

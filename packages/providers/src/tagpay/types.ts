@@ -37,3 +37,4 @@ export interface TagPayApiResponse<T> {
   message?: string;
   code?: string;
 }
+

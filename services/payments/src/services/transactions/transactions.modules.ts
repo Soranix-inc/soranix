@@ -15,3 +15,4 @@ class TransactionsModules {
 }
 
 export default TransactionsModules;
+

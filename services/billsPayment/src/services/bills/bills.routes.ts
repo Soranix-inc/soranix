@@ -19,3 +19,4 @@ class BillsRoutes {
 }
 
 export default BillsRoutes;
+

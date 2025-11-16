@@ -15,3 +15,4 @@ class BalanceModules {
 }
 
 export default BalanceModules;
+

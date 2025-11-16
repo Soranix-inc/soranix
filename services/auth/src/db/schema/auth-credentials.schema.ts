@@ -20,3 +20,4 @@ export const authCredentials = pgTable('auth_credentials', {
 
 export type AuthCredential = typeof authCredentials.$inferSelect;
 export type NewAuthCredential = typeof authCredentials.$inferInsert;
+

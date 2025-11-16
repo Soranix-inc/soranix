@@ -85,3 +85,4 @@ export function errorHandler(options: ErrorHandlerOptions = {}) {
     res.status(500).json(unknownErrorResponse);
   };
 }
+

@@ -77,3 +77,4 @@ export class EventEncryption {
     return /^[0-9a-f]+$/i.test(data) && data.length > (this.IV_LENGTH + this.TAG_LENGTH) * 2;
   }
 }
+

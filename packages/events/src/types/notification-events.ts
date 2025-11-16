@@ -152,3 +152,4 @@ export class PushSentEvent extends DomainEvent {
     };
   }
 }
+

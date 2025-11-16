@@ -66,3 +66,4 @@ export function getSpanId(): string | undefined {
   const span = trace.getActiveSpan();
   return span?.spanContext().spanId;
 }
+

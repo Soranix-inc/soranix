@@ -28,3 +28,4 @@ export interface BuyPowerApiResponse<T> {
   message?: string;
   code?: string;
 }
+

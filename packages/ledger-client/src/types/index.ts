@@ -47,3 +47,4 @@ export interface BalanceCheckOptions {
   useCache?: boolean;
   cacheTTL?: number;
 }
+

@@ -18,3 +18,4 @@ export function asyncMiddleware(fn: (req: Request, res: Response, next: NextFunc
     Promise.resolve(fn(req, res, next)).catch(next);
   };
 }
+

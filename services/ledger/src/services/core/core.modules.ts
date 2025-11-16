@@ -15,3 +15,4 @@ class CoreModules {
 }
 
 export default CoreModules;
+

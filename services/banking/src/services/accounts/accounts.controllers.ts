@@ -35,3 +35,4 @@ class AccountsControllers {
 }
 
 export default AccountsControllers;
+

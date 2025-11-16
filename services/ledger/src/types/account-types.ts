@@ -140,3 +140,4 @@ export class AccountId {
     return !this.isUserAccount(accountId);
   }
 }
+

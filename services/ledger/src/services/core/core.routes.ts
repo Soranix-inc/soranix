@@ -16,3 +16,4 @@ class CoreRoutes {
 }
 
 export default CoreRoutes;
+

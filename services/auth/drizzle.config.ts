@@ -15,3 +15,4 @@ export default {
     database: process.env.DB_NAME || 'soranix_auth',
   },
 } satisfies Config;
+

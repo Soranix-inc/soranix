@@ -193,3 +193,4 @@ export function getTopicConfig(topic: string): TopicConfig | undefined {
 export function getAllTopicNames(): string[] {
   return Object.values(KAFKA_TOPICS);
 }
+

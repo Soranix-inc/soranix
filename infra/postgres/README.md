@@ -247,3 +247,4 @@ When ready to split into separate instances:
 6. Deploy
 
 No code changes needed - just connection string updates!
+

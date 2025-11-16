@@ -24,3 +24,4 @@ export abstract class TagPayBase extends ProviderBase {
     return url;
   }
 }
+

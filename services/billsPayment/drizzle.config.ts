@@ -15,3 +15,4 @@ export default defineConfig({
     database: process.env.DB_NAME || 'bills_payment_db',
   },
 });
+

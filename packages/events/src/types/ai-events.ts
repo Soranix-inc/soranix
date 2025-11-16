@@ -135,3 +135,4 @@ export class AIPredictionUpdatedEvent extends DomainEvent {
     };
   }
 }
+

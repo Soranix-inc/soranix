@@ -15,3 +15,4 @@ class InvestmentsModules {
 }
 
 export default InvestmentsModules;
+

@@ -47,3 +47,4 @@ export const accountTransactions = pgTable('account_transactions', {
   metadata: jsonb('metadata'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
 });
+

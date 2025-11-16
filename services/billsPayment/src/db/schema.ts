@@ -26,3 +26,4 @@ export const billPaymentHistory = pgTable('bill_payment_history', {
   metadata: jsonb('metadata'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
 });
+

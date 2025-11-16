@@ -38,3 +38,4 @@ export interface JWTVerifyResult {
   payload?: JWTPayload;
   error?: string;
 }
+

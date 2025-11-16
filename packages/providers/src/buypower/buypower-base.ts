@@ -24,3 +24,4 @@ export abstract class BuyPowerBase extends ProviderBase {
     return url;
   }
 }
+

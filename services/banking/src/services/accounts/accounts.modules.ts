@@ -15,3 +15,4 @@ class AccountsModules {
 }
 
 export default AccountsModules;
+

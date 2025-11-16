@@ -39,3 +39,4 @@ export class TagPayWallet extends TagPayBase {
     throw new Error('Method not implemented');
   }
 }
+

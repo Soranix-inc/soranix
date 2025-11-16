@@ -24,3 +24,4 @@ export const authTokens = pgTable('auth_tokens', {
 
 export type AuthToken = typeof authTokens.$inferSelect;
 export type NewAuthToken = typeof authTokens.$inferInsert;
+

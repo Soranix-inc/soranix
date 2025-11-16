@@ -79,3 +79,4 @@ export function hasPrivateKeyConfig(): boolean {
 export function hasPublicKeyConfig(): boolean {
   return !!(process.env.JWT_PUBLIC_KEY || process.env.JWT_PUBLIC_KEY_PATH);
 }
+

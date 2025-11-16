@@ -15,3 +15,4 @@ export function initializeEventConfigs(): void {
   // registerEventConfigs(AI_EVENT_CONFIG);
   // registerEventConfigs(NOTIFICATION_EVENT_CONFIG);
 }
+
