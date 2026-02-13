@@ -54,3 +54,5 @@ export const accountBalances = pgTable(
 export type AccountBalance = typeof accountBalances.$inferSelect;
 export type NewAccountBalance = typeof accountBalances.$inferInsert;
 
+
+

@@ -1,6 +1,9 @@
 import { Router } from 'express';
 
 import { AuthModule } from '../auth/auth.modules.js';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres/driver.js';
+import * as schemas from '../../db/schema/index.js';
+import { Pool } from 'pg';
 
 /**
  * Root Module
@@ -10,17 +13,18 @@ class RootModules {
   private readonly router: Router;
   private authModule: AuthModule;
 
-  constructor() {
+
+  constructor(db: NodePgDatabase<typeof schemas>& {$client: Pool}) {
     this.router = Router();
-    this.authModule = new AuthModule();
+    this.authModule = new AuthModule(db);
+    this.initializeRoutes();
   }
 
-  async initialize(): Promise<void> {
-    await this.authModule.initialize();
+  async initializeRoutes(): Promise<void> {
+    this.router.use('/auth', this.authModule.routes.routes());
   }
 
   routes(): Router {
-    this.router.use('/auth', this.authModule.getRouter());
     return this.router;
   }
 }

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: soranix
+  labels:
+    name: soranix
+    environment: base
+  annotations:
+    description: 'Soranix AI-powered finance platform'
+
+
+
+
+

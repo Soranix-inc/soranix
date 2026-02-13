@@ -71,3 +71,5 @@ export const portfolioPerformance = pgTable('portfolio_performance', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
 });
 
+
+

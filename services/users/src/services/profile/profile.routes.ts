@@ -1,7 +1,5 @@
 import express from 'express';
 
-import { requireAuth } from '@packages/middleware';
-
 import ProfileControllers from './profile.controllers';
 
 class ProfileRoutes {
@@ -12,8 +10,7 @@ class ProfileRoutes {
   }
 
   routes = () => {
-    // All profile routes require authentication
-    this.router.use(requireAuth());
+    // All profile routes require authentication (handled by gateway)
 
     // Get own profile (using authenticated user ID)
     this.router.get('/me', this.controller.getMyProfile);

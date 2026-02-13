@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: soranix
+  labels:
+    app: web
+    tier: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: web
+        tier: frontend
+    spec:
+      serviceAccountName: soranix-sa
+      containers:
+        - name: web
+          image: soranix/web:latest
+          ports:
+            - containerPort: 5173
+              name: http
+          resources:
+            requests:
+              cpu: '100m'
+              memory: '128Mi'
+            limits:
+              cpu: '500m'
+              memory: '512Mi'
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5173
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5173
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          env:
+            - name: VITE_API_URL
+              value: 'http://api.soranix.local'
+
+
+
+
+

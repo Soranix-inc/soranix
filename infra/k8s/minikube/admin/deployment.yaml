@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin
+  namespace: soranix
+  labels:
+    app: admin
+    tier: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: admin
+        tier: frontend
+    spec:
+      serviceAccountName: soranix-sa
+      containers:
+        - name: admin
+          image: soranix/admin:latest
+          ports:
+            - containerPort: 3001
+              name: http
+          resources:
+            requests:
+              cpu: '100m'
+              memory: '128Mi'
+            limits:
+              cpu: '500m'
+              memory: '512Mi'
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          env:
+            - name: NODE_ENV
+              value: 'production'
+            - name: API_URL
+              value: 'http://api.soranix.local'
+
+
+
+
+

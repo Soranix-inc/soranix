@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-service
+  namespace: soranix
+  labels:
+    app: users
+    tier: backend
+spec:
+  selector:
+    app: users
+    tier: backend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5004
+      protocol: TCP
+  type: ClusterIP
+
+
+
+
+

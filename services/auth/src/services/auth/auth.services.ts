@@ -1,245 +1,130 @@
-import axios from 'axios';
-
+import crypto from 'crypto';
+import { eq } from 'drizzle-orm';
 import { systemLogger } from '@packages/logging';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres/driver.js';
+import * as schemas from '../../db/schema/index.js';
+import { Pool } from 'pg';
+import { EmailAlreadyExistsError } from '@packages/errors/src/common/user-errors.js';
+import { redisClient } from '../../config/redis.config.js';
+import { PasswordService } from '../../utils/passwordUtils.js';
+import { eventBus } from '../../events/event-bus.js';
+import { credentials } from '../../db/schema/credentials.schema.js';
+import { RegisterType } from './auth.types.js';
+import { EmailVerificationRequestedData } from '@packages/events';
 
-import { securityConfig } from '../../config/security.config.js';
-import { SignupRequest, LoginRequest, AuthResponse } from '../../types/auth-types.js';
-import { DeviceService } from '../device/device.service.js';
-import { SessionService } from '../session/session.service.js';
-import { TokenService } from '../token/token.service.js';
-
-/**
- * Stateless Auth Service
- * - Calls Users Service API for user data
- * - Uses Redis for sessions/tokens
- * - No database access
- */
 export class AuthService {
-  private tokenService: TokenService;
-  private sessionService: SessionService;
-  private deviceService: DeviceService;
-  private usersServiceUrl: string;
+  private readonly db: NodePgDatabase<typeof schemas> & { $client: Pool };
+  private readonly passwordService: PasswordService;
 
-  constructor() {
-    this.tokenService = new TokenService();
-    this.sessionService = new SessionService();
-    this.deviceService = new DeviceService();
-    this.usersServiceUrl = process.env.USERS_SERVICE_URL || 'http://localhost:3001';
+  constructor(db: NodePgDatabase<typeof schemas> & { $client: Pool }) {
+    this.db = db;
+    this.passwordService = new PasswordService();
   }
 
-  /**
-   * Signup - delegates to Users Service
-   */
-  async signup(request: SignupRequest): Promise<{ success: boolean; message: string }> {
-    try {
-      // Call Users Service API to create user
-      const response = await axios.post(`${this.usersServiceUrl}/api/v1/users/register`, {
-        email: request.email,
-        password: request.password,
-        firstName: request.firstName,
-        lastName: request.lastName,
-        phoneNumber: request.phoneNumber,
-      });
+  async register(data: RegisterType, userAgent: string) {
+    const existingCredential = await this.db
+      .select()
+      .from(credentials)
+      .where(eq(credentials.email, data.email))
+      .limit(1);
 
-      systemLogger.info('User registered via Users Service', {
-        email: request.email,
-      });
+    if (existingCredential.length > 0) {
+      throw new EmailAlreadyExistsError(data.email);
+    }
 
+    const passwordHash = await this.passwordService.hashPassword(data.password);
+
+    const [newCredential] = await this.db
+      .insert(credentials)
+      .values({
+        email: data.email,
+        password: passwordHash,
+        email_verified: false,
+        refresh_token: [],
+        refresh_token_version: 0,
+        user_agent: userAgent,
+      })
+      .returning();
+
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + 24);
+
+    await redisClient.setEx(
+      `email_verification:${verificationToken}`,
+      24 * 60 * 60,
+      JSON.stringify({
+        userId: newCredential.id,
+        email: data.email,
+        createdAt: new Date().toISOString(),
+      })
+    );
+
+    const authEventPublisher = eventBus.getAuthEventPublisher();
+    const verificationData: EmailVerificationRequestedData = {
+      userId: newCredential.id,
+      email: data.email,
+      token: verificationToken,
+      expiresAt: expiresAt.toISOString(),
+    };
+
+    await authEventPublisher.publishEmailVerificationRequested(newCredential.id, verificationData);
+
+    systemLogger.info('User registration initiated', {
+      userId: newCredential.id,
+      email: data.email,
+    });
+
+    return {
+      id: newCredential.id,
+      email: newCredential.email,
+      emailVerified: false,
+      message: 'Registration successful. Please check your email to verify your account.',
+    };
+  }
+
+  async verifyEmail(token: string) {
+    const tokenKey = `email_verification:${token}`;
+    const tokenData = await redisClient.get(tokenKey);
+
+    if (!tokenData) {
+      throw new Error('Invalid or expired verification token');
+    }
+
+    const { userId, email } = JSON.parse(tokenData);
+
+    const [credential] = await this.db.select().from(credentials).where(eq(credentials.id, userId)).limit(1);
+
+    if (!credential) {
+      throw new Error('Credential not found');
+    }
+
+    if (credential.email_verified) {
+      await redisClient.del(tokenKey);
       return {
-        success: true,
-        message: 'Registration successful. Please check your email to verify your account.',
+        message: 'Email already verified',
+        emailVerified: true,
       };
-    } catch (error) {
-      systemLogger.error('Signup failed', {
-        email: request.email,
-        error: error instanceof Error ? error.message : String(error),
-      });
-      throw error;
     }
-  }
 
-  /**
-   * Login - validates with Users Service, creates session
-   */
-  async login(request: LoginRequest): Promise<AuthResponse> {
-    try {
-      // Validate credentials with Users Service
-      const response = await axios.post(`${this.usersServiceUrl}/api/v1/users/validate`, {
-        email: request.email,
-        password: request.password,
-      });
+    await this.db.update(credentials).set({ email_verified: true }).where(eq(credentials.id, userId));
 
-      const user = response.data.user;
+    await redisClient.del(tokenKey);
 
-      if (!response.data.success) {
-        throw new Error(response.data.error || 'Invalid credentials');
-      }
+    const authEventPublisher = eventBus.getAuthEventPublisher();
+    await authEventPublisher.publishUserRegistered(userId, {
+      userId,
+      email,
+    });
 
-      // Create session in Redis
-      const sessionId = await this.sessionService.createSession(user.id, request.deviceInfo);
+    systemLogger.info('Email verified and user registered event published', {
+      userId,
+      email,
+    });
 
-      // Generate tokens
-      const accessToken = this.tokenService.generateAccessToken({
-        userId: user.id,
-        email: user.email,
-        sessionId,
-        deviceId: request.deviceInfo.deviceId,
-        roles: user.roles || ['user'],
-      });
-
-      const refreshToken = await this.tokenService.generateRefreshToken(
-        user.id,
-        sessionId,
-        request.deviceInfo.deviceId
-      );
-
-      systemLogger.info('Login successful', {
-        userId: user.id,
-        sessionId,
-      });
-
-      // Get session for response
-      const session = await this.sessionService.getSession(sessionId);
-
-      return {
-        success: true,
-        user: {
-          id: user.id,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          emailVerified: user.emailVerified,
-          mfaEnabled: user.mfaEnabled,
-        },
-        tokens: {
-          accessToken,
-          refreshToken,
-          expiresIn: this.parseExpiry(securityConfig.accessTokenExpiry),
-        },
-        session: {
-          sessionId: session!.sessionId,
-          expiresAt: session!.expiresAt,
-        },
-      };
-    } catch (error) {
-      systemLogger.error('Login failed', {
-        email: request.email,
-        error: error instanceof Error ? error.message : String(error),
-      });
-      throw error;
-    }
-  }
-
-  /**
-   * Logout - revokes session and tokens
-   */
-  async logout(sessionId: string): Promise<void> {
-    try {
-      // Revoke session from Redis
-      await this.sessionService.revokeSession(sessionId);
-
-      // Revoke all refresh tokens for this session
-      await this.tokenService.revokeSessionTokens(sessionId);
-
-      systemLogger.info('Logout successful', { sessionId });
-    } catch (error) {
-      systemLogger.error('Logout failed', {
-        sessionId,
-        error: error instanceof Error ? error.message : String(error),
-      });
-      throw error;
-    }
-  }
-
-  /**
-   * Logout all - revokes all user sessions
-   */
-  async logoutAll(userId: string): Promise<void> {
-    try {
-      // Revoke all sessions
-      await this.sessionService.revokeAllUserSessions(userId);
-
-      systemLogger.info('All sessions logged out', { userId });
-    } catch (error) {
-      systemLogger.error('Logout all failed', {
-        userId,
-        error: error instanceof Error ? error.message : String(error),
-      });
-      throw error;
-    }
-  }
-
-  /**
-   * Verify email - delegates to Users Service
-   */
-  async verifyEmail(token: string): Promise<boolean> {
-    try {
-      const response = await axios.post(`${this.usersServiceUrl}/api/v1/users/verify-email`, {
-        token,
-      });
-
-      return response.data.success;
-    } catch (error) {
-      systemLogger.error('Email verification failed', {
-        error: error instanceof Error ? error.message : String(error),
-      });
-      return false;
-    }
-  }
-
-  /**
-   * Request password reset - delegates to Users Service
-   */
-  async forgotPassword(email: string): Promise<void> {
-    try {
-      await axios.post(`${this.usersServiceUrl}/api/v1/users/forgot-password`, {
-        email,
-      });
-
-      systemLogger.info('Password reset requested', { email });
-    } catch (error) {
-      systemLogger.error('Forgot password failed', {
-        email,
-        error: error instanceof Error ? error.message : String(error),
-      });
-      // Don't throw to prevent email enumeration
-    }
-  }
-
-  /**
-   * Reset password - delegates to Users Service
-   */
-  async resetPassword(token: string, newPassword: string): Promise<boolean> {
-    try {
-      const response = await axios.post(`${this.usersServiceUrl}/api/v1/users/reset-password`, {
-        token,
-        newPassword,
-      });
-
-      return response.data.success;
-    } catch (error) {
-      systemLogger.error('Password reset failed', {
-        error: error instanceof Error ? error.message : String(error),
-      });
-      return false;
-    }
-  }
-
-  /**
-   * Parse expiry string to seconds
-   */
-  private parseExpiry(expiryString: string): number {
-    const match = expiryString.match(/^(\d+)([smhd])$/);
-    if (!match) return 900; // Default 15 minutes
-
-    const [, value, unit] = match;
-    const seconds = {
-      s: 1,
-      m: 60,
-      h: 60 * 60,
-      d: 24 * 60 * 60,
-    }[unit as 's' | 'm' | 'h' | 'd'];
-
-    return parseInt(value) * seconds;
+    return {
+      message: 'Email verified successfully',
+      emailVerified: true,
+    };
   }
 }

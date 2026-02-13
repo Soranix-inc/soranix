@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: banking-service
+  namespace: soranix
+  labels:
+    app: banking
+    tier: backend
+spec:
+  selector:
+    app: banking
+    tier: backend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5002
+      protocol: TCP
+  type: ClusterIP
+
+
+
+
+

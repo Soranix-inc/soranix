@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: soranix
+
+resources:
+  - web-app.yaml
+
+commonLabels:
+  app.kubernetes.io/name: soranix
+  app.kubernetes.io/part-of: soranix-platform
+  app.kubernetes.io/managed-by: kustomize
+
+
+
+
+

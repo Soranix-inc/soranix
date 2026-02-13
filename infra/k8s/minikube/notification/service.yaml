@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-service
+  namespace: soranix
+  labels:
+    app: notification
+    tier: backend
+spec:
+  selector:
+    app: notification
+    tier: backend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5008
+      protocol: TCP
+  type: ClusterIP
+
+
+
+
+

@@ -1,14 +1,12 @@
-import { EventPublisher, initializeEventConfigs } from '@packages/events';
+import { EventPublisher, registerEventConfigs, AUTH_EVENT_CONFIG } from '@packages/events';
 import { systemLogger } from '@packages/logging';
-import { getRabbitMQConnection } from '@packages/rabbitmq';
-import { ExchangeManager, QueueManager } from '@packages/rabbitmq';
 
-import { UserEventPublisher } from './publishers/user-event-publisher';
+import { AuthEventPublisher } from './publishers/auth-event-publisher';
 
 export class EventBus {
   private static instance: EventBus;
   private eventPublisher: EventPublisher | null = null;
-  private userEventPublisher: UserEventPublisher | null = null;
+  private authEventPublisher: AuthEventPublisher | null = null;
   private isInitialized = false;
 
   private constructor() {}
@@ -29,32 +27,17 @@ export class EventBus {
     try {
       systemLogger.info('Initializing event bus...');
 
-      // Initialize event configurations
-      initializeEventConfigs();
+      registerEventConfigs(AUTH_EVENT_CONFIG);
 
-      // Get RabbitMQ connection
-      const rabbitMQ = getRabbitMQConnection();
-      await rabbitMQ.connect();
-
-      const channel = rabbitMQ.getChannel();
-
-      // Setup exchanges
-      const exchangeManager = new ExchangeManager(channel);
-      await exchangeManager.setupExchanges();
-
-      // Setup queues
-      const queueManager = new QueueManager(channel);
-      await queueManager.setupQueues();
-
-      // Setup queue bindings
-      await queueManager.setupQueueBindings();
-
-      // Initialize event publisher
-      this.eventPublisher = new EventPublisher('auth-service');
+      // Initialize event publisher with RabbitMQ adapter
+      // All infrastructure setup (exchanges, queues, bindings) is handled by EventPublisher
+      this.eventPublisher = new EventPublisher('auth-service', {
+        adapters: 'rabbitmq',
+      });
       await this.eventPublisher.initialize();
 
-      // Initialize user event publisher
-      this.userEventPublisher = new UserEventPublisher(this.eventPublisher);
+      // Initialize auth event publisher
+      this.authEventPublisher = new AuthEventPublisher(this.eventPublisher);
 
       this.isInitialized = true;
 
@@ -67,11 +50,11 @@ export class EventBus {
     }
   }
 
-  getUserEventPublisher(): UserEventPublisher {
-    if (!this.userEventPublisher) {
+  getAuthEventPublisher(): AuthEventPublisher {
+    if (!this.authEventPublisher) {
       throw new Error('Event bus not initialized. Call initialize() first.');
     }
-    return this.userEventPublisher;
+    return this.authEventPublisher;
   }
 
   getEventPublisher(): EventPublisher {
@@ -86,5 +69,4 @@ export class EventBus {
   }
 }
 
-// Export singleton instance
 export const eventBus = EventBus.getInstance();

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification
+  namespace: soranix
+  labels:
+    app: notification
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: notification
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: notification
+        tier: backend
+    spec:
+      serviceAccountName: soranix-sa
+      containers:
+        - name: notification
+          image: soranix/notification:latest
+          ports:
+            - containerPort: 5008
+              name: http
+          resources:
+            requests:
+              cpu: '200m'
+              memory: '256Mi'
+            limits:
+              cpu: '1000m'
+              memory: '1Gi'
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5008
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5008
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          env:
+            - name: NODE_ENV
+              value: 'production'
+            - name: PORT
+              value: '5008'
+
+
+
+
+

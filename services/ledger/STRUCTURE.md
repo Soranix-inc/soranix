@@ -348,3 +348,5 @@ The ledger service now follows the **exact same architectural pattern** as auth 
 
 **Ready for review!** 🚀
 
+
+

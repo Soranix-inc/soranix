@@ -1,0 +1,57 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: soranix-app-route
+  namespace: soranix
+spec:
+  parentRefs:
+    - name: soranix-gateway
+  hostnames:
+    - app.soranix.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: client-service
+          port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: soranix-web-route
+  namespace: soranix
+spec:
+  parentRefs:
+    - name: soranix-gateway
+  hostnames:
+    - web.soranix.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: web-service
+          port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: soranix-admin-route
+  namespace: soranix
+spec:
+  parentRefs:
+    - name: soranix-gateway
+  hostnames:
+    - admin.soranix.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: admin-service
+          port: 80
+

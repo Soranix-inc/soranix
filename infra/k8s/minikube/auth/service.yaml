@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  namespace: soranix
+  labels:
+    app: auth
+    tier: backend
+spec:
+  selector:
+    app: auth
+    tier: backend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5000
+      protocol: TCP
+  type: ClusterIP
+
+
+
+
+

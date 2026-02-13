@@ -2,25 +2,19 @@ import { Router } from 'express';
 
 import { AuthControllers } from './auth.controllers.js';
 import { AuthRoutes } from './auth.routes.js';
+import { AuthService } from './auth.services.js';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres/driver.js';
+import * as schemas from '../../db/schema/index.js';
+import { Pool } from 'pg';
 
-/**
- * Auth Module
- * Aggregates auth controllers and routes
- */
 export class AuthModule {
-  private controllers: AuthControllers;
-  private routes: AuthRoutes;
+  public authService: AuthService;
+  public controllers: AuthControllers;
+  public routes: AuthRoutes;
 
-  constructor() {
-    this.controllers = new AuthControllers();
+  constructor(private readonly db: NodePgDatabase<typeof schemas> & { $client: Pool }) {
+    this.authService = new AuthService(this.db);
+    this.controllers = new AuthControllers(this.authService);
     this.routes = new AuthRoutes(this.controllers);
-  }
-
-  async initialize(): Promise<void> {
-    await this.controllers.initialize();
-  }
-
-  getRouter(): Router {
-    return this.routes.routes();
   }
 }

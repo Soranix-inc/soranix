@@ -22,3 +22,5 @@ export const getMixpanelConfig = (): MixpanelConfig => {
   };
 };
 
+
+

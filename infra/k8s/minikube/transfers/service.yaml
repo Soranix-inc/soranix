@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: transfers-service
+  namespace: soranix
+  labels:
+    app: transfers
+    tier: backend
+spec:
+  selector:
+    app: transfers
+    tier: backend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5006
+      protocol: TCP
+  type: ClusterIP
+
+
+
+
+

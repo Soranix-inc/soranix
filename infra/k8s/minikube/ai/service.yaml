@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-service
+  namespace: soranix
+  labels:
+    app: ai
+    tier: backend
+spec:
+  selector:
+    app: ai
+    tier: backend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5001
+      protocol: TCP
+  type: ClusterIP
+
+
+
+
+

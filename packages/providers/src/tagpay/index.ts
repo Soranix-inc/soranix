@@ -19,3 +19,5 @@ export default class TagPay {
 export { TagPayCustomer, TagPayWallet, TagPayBills };
 export type { TagPayConfig } from './config.js';
 
+
+

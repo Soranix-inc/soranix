@@ -19,7 +19,6 @@ const pool = new Pool({
 
 export const db = drizzle(pool, { schema });
 
-// Test connection
 pool.on('connect', () => {
   systemLogger.info('Database connection established');
 });
@@ -47,4 +46,6 @@ export async function closeDatabaseConnection(): Promise<void> {
   await pool.end();
   systemLogger.info('Database connection pool closed');
 }
+
+
 

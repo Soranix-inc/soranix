@@ -29,7 +29,6 @@
     "@packages/errors": "*",
     "@packages/events": "*",
     "@packages/logging": "*",
-    "@packages/middleware": "*",
     "@packages/rabbitmq": "*",
     "@packages/tracing": "*",
     "@packages/utils": "*",

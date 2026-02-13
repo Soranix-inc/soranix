@@ -1,0 +1,51 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: soranix-staging
+
+resources:
+  - ../../base
+
+patches:
+  - path: shared/namespace-patch.yaml
+  - path: shared/config-patch.yaml
+  - path: shared/httproute-patch.yaml
+  - path: shared/hpa-patch.yaml
+  - path: shared/ingress-patch.yaml
+  - path: gateway/patch.yaml
+  - path: client/patch.yaml
+  - path: web/patch.yaml
+  - path: admin/patch.yaml
+  - path: auth/patch.yaml
+  - path: ai/patch.yaml
+  - path: banking/patch.yaml
+  - path: payments/patch.yaml
+  - path: users/patch.yaml
+  - path: money-management/patch.yaml
+  - path: transfers/patch.yaml
+  - path: bills-payment/patch.yaml
+  - path: notification/patch.yaml
+  - path: flows/patch.yaml
+  - path: portfolio/patch.yaml
+  - path: billing/patch.yaml
+
+configMapGenerator:
+  - name: soranix-config
+    behavior: merge
+    literals:
+      - NODE_ENV=staging
+      - LOG_LEVEL=info
+      - CORS_ORIGIN=https://staging.app.soranix.com,https://staging.web.soranix.com,https://staging.admin.soranix.com
+
+secretGenerator:
+  - name: soranix-secrets
+    behavior: merge
+    literals:
+      - database-url=postgresql://user:password@staging-db:5432/soranix_staging
+      - jwt-secret=staging-jwt-secret-key
+      - stripe-secret-key=sk_test_stripe_secret_key
+      - openai-api-key=sk-staging-openai-api-key
+
+commonLabels:
+  environment: staging
+

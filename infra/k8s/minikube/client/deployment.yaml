@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client
+  namespace: soranix
+  labels:
+    app: client
+    tier: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: client
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: client
+        tier: frontend
+    spec:
+      serviceAccountName: soranix-sa
+      containers:
+        - name: client
+          image: soranix/client:latest
+          ports:
+            - containerPort: 3000
+              name: http
+          resources:
+            requests:
+              cpu: '100m'
+              memory: '128Mi'
+            limits:
+              cpu: '500m'
+              memory: '512Mi'
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          env:
+            - name: NODE_ENV
+              value: 'production'
+            - name: NEXT_PUBLIC_API_URL
+              value: 'http://api.soranix.local'
+
+
+
+
+

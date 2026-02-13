@@ -1,0 +1,51 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: soranix-prod
+
+resources:
+  - ../../base
+
+patches:
+  - path: shared/namespace-patch.yaml
+  - path: shared/config-patch.yaml
+  - path: shared/httproute-patch.yaml
+  - path: shared/hpa-patch.yaml
+  - path: shared/ingress-patch.yaml
+  - path: gateway/patch.yaml
+  - path: client/patch.yaml
+  - path: web/patch.yaml
+  - path: admin/patch.yaml
+  - path: auth/patch.yaml
+  - path: ai/patch.yaml
+  - path: banking/patch.yaml
+  - path: payments/patch.yaml
+  - path: users/patch.yaml
+  - path: money-management/patch.yaml
+  - path: transfers/patch.yaml
+  - path: bills-payment/patch.yaml
+  - path: notification/patch.yaml
+  - path: flows/patch.yaml
+  - path: portfolio/patch.yaml
+  - path: billing/patch.yaml
+
+configMapGenerator:
+  - name: soranix-config
+    behavior: merge
+    literals:
+      - NODE_ENV=production
+      - LOG_LEVEL=warn
+      - CORS_ORIGIN=https://app.soranix.com,https://web.soranix.com,https://admin.soranix.com
+
+secretGenerator:
+  - name: soranix-secrets
+    behavior: merge
+    literals:
+      - database-url=postgresql://user:password@prod-db:5432/soranix_prod
+      - jwt-secret=prod-jwt-secret-key
+      - stripe-secret-key=sk_live_stripe_secret_key
+      - openai-api-key=sk-prod-openai-api-key
+
+commonLabels:
+  environment: production
+

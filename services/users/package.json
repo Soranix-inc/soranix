@@ -35,7 +35,6 @@
     "@packages/events": "*",
     "@packages/logging": "*",
     "@packages/metrics": "*",
-    "@packages/middleware": "*",
     "@packages/rabbitmq": "*",
     "@packages/tracing": "*",
     "@packages/utils": "*",

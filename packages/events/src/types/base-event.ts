@@ -54,7 +54,7 @@ export function getEventConfig(eventType: string): EventConfig {
       priority: EventPriority.NORMAL,
       deliveryGuarantee: DeliveryGuarantee.AT_LEAST_ONCE,
       requiresEncryption: false,
-      ttl: 604800000, // 7 days
+      ttl: 604800000,
       maxRetries: 2,
     }
   );
@@ -63,34 +63,4 @@ export function getEventConfig(eventType: string): EventConfig {
 // Utility function to register event configurations
 export function registerEventConfigs(configs: Record<string, EventConfig>): void {
   Object.assign(EVENT_CONFIG_REGISTRY, configs);
-}
-
-// Generic Event Factory Function
-export function createEvent<T extends BaseEvent>(
-  eventType: T['eventType'],
-  aggregateId: string,
-  data: T['data'],
-  options: { correlationId?: string; causationId?: string; metadata?: EventMetadata } = {}
-): T {
-  return {
-    eventId: generateEventId(),
-    eventType,
-    aggregateId,
-    timestamp: new Date(),
-    version: 1,
-    correlationId: options.correlationId || generateCorrelationId(),
-    causationId: options.causationId,
-    metadata: options.metadata,
-    data,
-    encrypted: false,
-  } as T;
-}
-
-// Utility functions
-function generateEventId(): string {
-  return `evt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-}
-
-function generateCorrelationId(): string {
-  return `corr_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 }

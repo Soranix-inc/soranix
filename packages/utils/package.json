@@ -13,22 +13,6 @@
       "import": "./src/jwt/index.ts",
       "types": "./src/jwt/index.ts"
     },
-    "./jwt/signer": {
-      "import": "./src/jwt/jwt-signer.ts",
-      "types": "./src/jwt/jwt-signer.ts"
-    },
-    "./jwt/verifier": {
-      "import": "./src/jwt/jwt-verifier.ts",
-      "types": "./src/jwt/jwt-verifier.ts"
-    },
-    "./jwt/key-loader": {
-      "import": "./src/jwt/key-loader.ts",
-      "types": "./src/jwt/key-loader.ts"
-    },
-    "./jwt/types": {
-      "import": "./src/jwt/jwt-types.ts",
-      "types": "./src/jwt/jwt-types.ts"
-    },
     "./idempotency": {
       "import": "./src/idempotency/index.ts",
       "types": "./src/idempotency/index.ts"

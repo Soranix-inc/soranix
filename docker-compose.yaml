@@ -78,3 +78,5 @@ volumes:
   rabbitmq_data:
     driver: local
 
+
+

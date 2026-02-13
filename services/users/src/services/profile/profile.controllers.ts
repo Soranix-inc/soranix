@@ -8,7 +8,7 @@ class ProfileControllers {
    * Get authenticated user's own profile
    */
   getMyProfile = asyncHandler(async (req: Request, res: Response) => {
-    // req.user is set by the requireAuth middleware
+    // User context is provided by gateway via headers (X-User-Id, etc.)
     const authenticatedUser = req.user!;
 
     systemLogger.info('Fetching own profile', {
